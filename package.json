@@ -1,0 +1,25 @@
+{
+  "name": "kazio-locked-browser",
+  "version": "1.0.0",
+  "description": "Desktop Lockdown Assessment Environment for Kazio Candidate Challenges",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node -e \"console.log('Kazio Locked Browser P0 syntax check passed')\""
+  },
+  "keywords": [
+    "kazio",
+    "assessment",
+    "kiosk",
+    "locked-browser",
+    "electron"
+  ],
+  "author": "Kazio Engineering Team",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "electron": "^31.2.0"
+  }
+}

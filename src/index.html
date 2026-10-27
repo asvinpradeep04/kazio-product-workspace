@@ -1,0 +1,2206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAZIO Team Challenge Submission Workbench</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&family=Space+Mono&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'kaz-black': '#050505',
+            'kaz-graphite': '#0A0908',
+            'kaz-dark-gray': '#1A1816',
+            'kaz-border': '#2A2624',
+            'kaz-text': '#D0C8C0',
+            'kaz-muted': '#8A827B',
+            'kaz-yellow': '#FFC46B',
+            'kaz-orange': '#FF5A0A',
+            'kaz-orange-hover': '#E04A00',
+            "on-secondary":"#313030","surface-container-lowest":"#180b06","on-primary-fixed":"#380d00","surface-bright":"#47352f","outline":"#ab897e","tertiary-container":"#92928f","on-secondary-fixed-variant":"#474646","molten-orange":"#FF5A0A","primary-fixed":"#ffdbcf","on-tertiary":"#30312f","tertiary-fixed":"#e4e2df","surface-container-highest":"#43312a","deep-ember":"#6D1D05","infinite-black":"#030303","secondary-fixed-dim":"#c9c6c5","on-tertiary-container":"#2a2b29","surface-variant":"#43312a","surface-container":"#2c1c16","on-secondary-fixed":"#1c1b1b","on-error":"#690005","hot-orange":"#FF3D00","inverse-primary":"#a93700","secondary-fixed":"#e5e2e1","surface-tint":"#ffb59b","on-error-container":"#ffdad6","surface":"#1e100b","graphite":"#171513","background":"#1e100b","tertiary":"#c8c6c4","primary-fixed-dim":"#ffb59b","surface-container-low":"#271812","on-surface-variant":"#e4beb2","cloud-white":"#F7F5F2","inverse-on-surface":"#3e2c26","error-container":"#93000a","inverse-surface":"#fadcd3","on-secondary-container":"#b7b4b4","primary":"#ffb59b","on-tertiary-fixed":"#1b1c1a","obsidian":"#080706","primary-container":"#ff5a0a","surface-container-high":"#372620","error":"#ffb4ab","on-tertiary-fixed-variant":"#474745","on-primary-container":"#521600","on-primary":"#5b1a00","on-background":"#fadcd3","warm-gold":"#FFC46B","tertiary-fixed-dim":"#c8c6c4","outline-variant":"#5b4137","surface-dim":"#1e100b","on-surface":"#fadcd3","secondary-container":"#474646","secondary":"#c9c6c5","on-primary-fixed-variant":"#812800"
+          },
+          fontFamily: {
+            'hanken': ['"Hanken Grotesk"', 'sans-serif'],
+            'inter': ['Inter', 'sans-serif'],
+            'mono': ['"Space Mono"', 'monospace'],
+            "meta-data":["Inter"],"hero-display":["Hanken Grotesk"],"headline-lg-mobile":["Hanken Grotesk"],"headline-lg":["Hanken Grotesk"],"label-mono":["JetBrains Mono"],"card-title":["Hanken Grotesk"],"body-base":["Inter"]
+          },
+          fontSize: {
+            "meta-data":["12px",{"lineHeight":"1.0","letterSpacing":"0.02em","fontWeight":"500"}],
+            "hero-display":["88px",{"lineHeight":"1.0","letterSpacing":"-0.045em","fontWeight":"600"}],
+            "headline-lg-mobile":["42px",{"lineHeight":"1.1","letterSpacing":"-0.035em","fontWeight":"500"}],
+            "headline-lg":["64px",{"lineHeight":"1.1","letterSpacing":"-0.035em","fontWeight":"500"}],
+            "label-mono":["13px",{"lineHeight":"1.0","letterSpacing":"0.05em","fontWeight":"500"}],
+            "card-title":["24px",{"lineHeight":"1.2","letterSpacing":"0","fontWeight":"600"}],
+            "body-base":["18px",{"lineHeight":"1.55","letterSpacing":"0","fontWeight":"400"}]
+          },
+          backgroundImage: {
+            'grain': 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\' opacity=\'0.03\'/%3E%3C/svg%3E")',
+            'grid-pattern': 'linear-gradient(to right, #1A1816 1px, transparent 1px), linear-gradient(to bottom, #1A1816 1px, transparent 1px)',
+          }
+        }
+      }
+    }
+  </script>
+  <style data-purpose="custom-utilities">
+    .bg-grid {
+      background-size: 40px 40px;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0A0908;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2A2624;
+      border-radius: 3px;
+    }
+    .drop-zone {
+      position: relative;
+    }
+    .drop-zone::before, .drop-zone::after, .drop-zone .corner {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #FFC46B;
+    }
+    .drop-zone::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+    .drop-zone::after { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+    .drop-zone .corner-bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+    .drop-zone .corner-br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+    @keyframes shimmer {
+      100% { transform: translateX(100%); }
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ─── MINIMAL TOP BAR (onboarding only) ─── -->
+  <header class="onboarding-bar" id="onboarding-bar">
+    <div class="ob-brand">
+      <span class="ob-symbol">◈</span>
+      <span class="ob-name">KAZIO</span>
+    </div>
+    <div class="ob-steps" id="ob-steps">
+      <span class="ob-step active"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+      <span class="ob-step"></span>
+    </div>
+    <button class="ob-skip" id="btn-skip">Skip to Assessment ⚡</button>
+  </header>
+
+  <!-- ─── SCREENS WRAPPER ─── -->
+  <main id="screens">
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 0 · RETURN — Sign In
+    ══════════════════════════════════════════ -->
+    <section class="screen active" id="s0">
+      <div class="split signin-split">
+
+        <!-- LEFT ART -->
+        <div class="art art-return">
+          <div class="art-gradient"></div>
+          <div class="art-text">
+            <h1 class="art-title">RETURN</h1>
+            <p class="art-sub">/RɪˈTɜːN/ VERB<br><br>TO COME BACK / TO WHAT YOU STARTED / AND CONTINUE /<br>WHAT YOU ARE BECOMING.</p>
+          </div>
+          <p class="art-footnote">YOUR PROOF IS STILL BUILDING. KEEP GOING.</p>
+        </div>
+
+        <!-- RIGHT FORM -->
+        <div class="form-side">
+          <div class="form-box">
+            <div class="signin-brand"><img src="assets/kazio-logo.png" alt="Kazio"><span>KAZIO</span></div>
+            <h2 class="form-heading">Welcome back</h2>
+            <p class="form-hint">Continue building your proof.</p>
+
+            <button class="btn-google" id="s0-google">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              Continue with Google
+            </button>
+
+            <div class="or-divider"><span>or</span></div>
+
+            <div class="field">
+              <label>Email</label>
+              <input type="email" id="s0-email" placeholder="you@candidate.io">
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input type="password" id="s0-pass" placeholder="••••••••">
+            </div>
+
+            <button class="btn-primary" id="s0-login">Log In →</button>
+
+            <p class="form-switch">No account? <a href="#" id="s0-tosignup">Create one</a></p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 1 · PROOF — Sign Up
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s1">
+      <div class="split signup-split">
+
+        <div class="art art-proof">
+          <div class="art-gradient"></div>
+          <div class="art-text">
+            <h1 class="art-title">PROOF</h1>
+            <p class="art-sub">THE EVIDENCE THAT TURNS WHAT YOU CAN DO<br>INTO SOMETHING OTHERS CAN TRUST.</p>
+          </div>
+          <p class="art-footnote">DON'T CLAIM CAPABILITY. DEMONSTRATE IT.</p>
+        </div>
+
+        <div class="form-side">
+          <div class="form-box">
+            <div class="signup-brand"><img src="assets/kazio-logo.png" alt="Kazio"><span>KAZIO</span></div>
+            <h2 class="form-heading">Create your account</h2>
+            <p class="form-hint">Start building your KAZIO profile.</p>
+
+            <button class="btn-google" id="s1-google">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              Sign up with Google
+            </button>
+
+            <div class="or-divider"><span>or create with email</span></div>
+
+            <div class="field">
+              <label>Full Name</label>
+              <input type="text" id="s1-name" placeholder="Alex Morgan">
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" id="s1-email" placeholder="you@candidate.io">
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input type="password" id="s1-pass" placeholder="Create a strong password">
+            </div>
+
+            <button class="btn-primary" id="s1-signup">Sign Up & Verify →</button>
+
+            <p class="form-switch">Already registered? <a href="#" id="s1-tologin">Log In</a></p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN OTP · Email Verification
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-otp">
+      <div class="split">
+
+        <div class="art art-proof">
+          <div class="art-gradient"></div>
+          <div class="art-text">
+            <h1 class="art-title">VERIFY</h1>
+            <p class="art-sub">CONFIRM YOUR IDENTITY</p>
+          </div>
+        </div>
+
+        <div class="form-side">
+          <div class="form-box">
+            <div class="form-tag">EMAIL VERIFICATION</div>
+            <h2 class="form-heading">Confirm your email</h2>
+            <p class="form-hint">We sent a verification link & code to <strong id="otp-email-display">your email</strong>. Enter the 6-digit code below or click the link in your inbox.</p>
+
+            <div class="field">
+              <label>6-Digit Verification Code / OTP</label>
+              <input type="text" id="s-otp-code" placeholder="e.g. 123456" autocomplete="one-time-code" maxlength="12">
+            </div>
+
+            <button class="btn-primary" id="btn-submit-otp">Verify Code &amp; Continue →</button>
+            <button class="btn-google" id="btn-check-verification" style="margin-top:10px">I clicked the email link — Continue →</button>
+
+            <p class="form-switch" style="margin-top:16px">Didn't get a code? <a href="#" id="btn-resend-otp">Resend verification code</a></p>
+            <p class="form-switch" style="margin-top:6px">Wrong email address? <a href="#" id="btn-otp-back">Back to Sign Up</a></p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 2 · Choose your professional arena
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s2">
+      <div class="grid-screen">
+        <div class="grid-header">
+          <p class="step-label">Step 1 of 5</p>
+          <h2>Choose your <em>professional arena</em></h2>
+          <p class="grid-sub">Select the core domain where you'll demonstrate your capability.</p>
+        </div>
+        <div class="card-grid col4" id="arena-grid">
+          <div class="sel-card selected" data-val="PRODUCT">
+            <div class="card-ico">📦</div>
+            <h3>PRODUCT</h3>
+            <p>Strategy, roadmapping, feature prioritization, and execution.</p>
+            <div class="card-state">SELECTED</div>
+          </div>
+          <div class="sel-card" data-val="ENGINEERING">
+            <div class="card-ico">⚡</div>
+            <h3>ENGINEERING</h3>
+            <p>Architecture, backend systems, system design, and algorithms.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+          <div class="sel-card" data-val="DESIGN">
+            <div class="card-ico">🎨</div>
+            <h3>DESIGN</h3>
+            <p>UI/UX systems, product design, wireframing, and user research.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+          <div class="sel-card" data-val="DATA">
+            <div class="card-ico">📊</div>
+            <h3>DATA</h3>
+            <p>Analytics, metrics pipelines, SQL models, and growth science.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+        </div>
+        <div class="grid-footer">
+          <button class="btn-back" data-to="1">← Back</button>
+          <button class="btn-primary" id="s2-next">Continue →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 3 · What do you want to achieve?
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s3">
+      <div class="grid-screen">
+        <div class="grid-header">
+          <p class="step-label">Step 2 of 5</p>
+          <h2>What do you want to <em>achieve?</em></h2>
+          <p class="grid-sub">Define your primary objective for entering the Kazio engine.</p>
+        </div>
+        <div class="card-grid col4" id="goal-grid">
+          <div class="sel-card selected" data-val="GET DISCOVERED">
+            <div class="card-ico">🔍</div>
+            <h3>GET DISCOVERED</h3>
+            <p>Match directly with top-tier companies looking for proven talent.</p>
+            <div class="card-state">SELECTED</div>
+          </div>
+          <div class="sel-card" data-val="PROVE CAPABILITY">
+            <div class="card-ico">🛡️</div>
+            <h3>PROVE CAPABILITY</h3>
+            <p>Take an official assessment requested by a hiring team.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+          <div class="sel-card" data-val="IMPROVE SKILLS">
+            <div class="card-ico">📈</div>
+            <h3>IMPROVE SKILLS</h3>
+            <p>Practice under realistic timed, anti-cheat conditions.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+          <div class="sel-card" data-val="COMPETE & RANK">
+            <div class="card-ico">🏆</div>
+            <h3>COMPETE & RANK</h3>
+            <p>Climb the global Kazio leaderboard across domain challenges.</p>
+            <div class="card-state">SELECT</div>
+          </div>
+        </div>
+        <div class="grid-footer">
+          <button class="btn-back" data-to="2">← Back</button>
+          <button class="btn-primary" id="s3-next">Continue →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 4 · What kind of work do you want to prove?
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s4">
+      <div class="grid-screen">
+        <div class="grid-header">
+          <p class="step-label">Step 3 of 5</p>
+          <h2>What kind of work do you want to <em>prove?</em></h2>
+          <p class="grid-sub">Narrow down your functional discipline within your arena.</p>
+        </div>
+        <div class="card-grid col3" id="family-grid">
+          <!-- Rendered dynamically -->
+        </div>
+        <div class="grid-footer">
+          <button class="btn-back" data-to="3">← Back</button>
+          <button class="btn-primary" id="s4-next">Continue →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 5 · Which path do you want to prove yourself on?
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s5">
+      <div class="grid-screen">
+        <div class="grid-header">
+          <p class="step-label">Step 4 of 5</p>
+          <h2>Which path do you want to <em>prove yourself on?</em></h2>
+          <p class="grid-sub">Select your specialization track for this assessment challenge.</p>
+        </div>
+        <div class="card-grid col3" id="track-grid">
+          <!-- Rendered dynamically -->
+        </div>
+        <div class="grid-footer">
+          <button class="btn-back" data-to="4">← Back</button>
+          <button class="btn-primary" id="s5-next">Continue →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 6 · BECOMING — A little context
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s6">
+      <div class="split">
+
+        <div class="art art-becoming">
+          <div class="art-gradient"></div>
+          <div class="art-text">
+            <h1 class="art-title">BECOMING</h1>
+            <p class="art-sub">YOUR CONTEXT &amp; SETUP</p>
+          </div>
+        </div>
+
+        <div class="form-side">
+          <div class="form-box wide">
+            <div class="form-tag">STEP 5 OF 5 · YOUR PROFILE</div>
+            <h2 class="form-heading">A little context</h2>
+            <p class="form-hint">Provide context so hiring managers evaluate your background accurately.</p>
+
+            <div class="field-row">
+              <div class="field">
+                <label>Years of Experience</label>
+                <select id="s6-exp">
+                  <option value="0-1 years">0 – 1 Years (Graduate)</option>
+                  <option value="1-3 years">1 – 3 Years (Junior)</option>
+                  <option value="3-5 years" selected>3 – 5 Years (Mid-Senior)</option>
+                  <option value="5-8 years">5 – 8 Years (Senior)</option>
+                  <option value="8+ years">8+ Years (Lead / Director)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Primary Industry</label>
+                <input type="text" id="s6-industry" placeholder="e.g. B2B SaaS, FinTech" value="B2B SaaS">
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Favourite Tools</label>
+              <input type="text" id="s6-tools" placeholder="e.g. Figma, Notion, Jira" value="Figma, Notion, Jira">
+            </div>
+
+            <div class="field">
+              <label>Portfolio / LinkedIn (optional)</label>
+              <input type="url" id="s6-portfolio" placeholder="https://linkedin.com/in/yourname">
+            </div>
+
+            <div class="form-footer-actions">
+              <button class="btn-back" data-to="5">← Back</button>
+              <button class="btn-primary" id="s6-save">Continue →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN 7 · Before you enter — the contract
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s7">
+      <div class="contract-screen">
+        <div class="contract-box">
+
+          <div class="contract-brand">KAZIO <span>FINAL ENTRY PROTOCOL · 01</span></div>
+          <div class="form-tag danger">SECURITY CONTRACT</div>
+          <h2 class="form-heading">Before you enter, understand <em>the contract.</em></h2>
+          <p class="contract-intro" id="contract-summary">KAZIO builds your professional standing from demonstrated work, evidence, and verification—not claims.</p>
+
+          <div class="rule-list">
+            <div class="rule">
+              <span class="rule-num">01</span>
+              <div>
+                <strong>Exclusive Full-Screen Kiosk Mode.</strong>
+                The app locks to full-screen. Switching windows, minimising, or accessing secondary displays is monitored and logged as violations.
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-num">02</span>
+              <div>
+                <strong>Complete Keyboard Shortcut Suppression.</strong>
+                All system shortcuts — Alt+Tab, F12 DevTools, Ctrl+P, Print Screen — are intercepted and blocked globally.
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-num">03</span>
+              <div>
+                <strong>Whitelist-Only Research Browser + AI Stripping.</strong>
+                Only approved domains resolve. Google search auto-appends <code>&amp;udm=14</code> to remove AI overviews. ChatGPT, Claude, Gemini, Copilot — all blocked.
+              </div>
+            </div>
+            <div class="rule">
+              <span class="rule-num">04</span>
+              <div>
+                <strong>Local Drafts &amp; Submission.</strong>
+                Drafts and attached deliverables remain in this app session. Final submission is recorded locally on this device.
+              </div>
+            </div>
+          </div>
+
+          <p class="contract-affirmation">Your reputation is not given to you. You earn it through the work.</p>
+
+          <label class="agree-check">
+            <input type="checkbox" id="agree-cb" checked>
+            <span class="check-box"></span>
+            I understand and accept the Kazio anti-cheat lockdown conditions.
+          </label>
+
+          <div class="form-footer-actions">
+            <button class="btn-back" data-to="6">← Back</button>
+            <button class="btn-danger" id="btn-engage">🛡️ Agree &amp; Enter Lockdown</button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         CHALLENGE DASHBOARD — Company opportunities
+    ══════════════════════════════════════════ -->
+  <!-- ─── UNIFIED APP NAVIGATION RAIL (App Mode) ─── -->
+  <aside class="left-rail" id="app-left-rail">
+    <div class="rail-top">
+      <div class="brand" aria-label="Kazio logo"><img src="assets/kazio-logo.png" alt="Kazio"></div>
+      <nav class="rail-nav" id="railNav">
+        <button aria-label="Home" class="rail-btn is-active" data-left-nav="welcome" title="Home / Dashboard">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7"></path><path d="M5 9v11h14V9"></path><path d="M9 20v-6h6v6"></path></svg>
+        </button>
+        <button aria-label="Profile skills analytics" class="rail-btn" data-left-nav="analytics" title="Profile skills analytics">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><path d="M4 19V9"></path><path d="M10 19V5"></path><path d="M16 19v-7"></path><path d="M22 19V3"></path><path d="M3 21h20"></path></svg>
+        </button>
+        <button aria-label="Mission Control" class="rail-btn" data-left-nav="mission-control" title="Mission Control">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"></circle><circle cx="6" cy="16" r="2"></circle><circle cx="18" cy="16" r="2"></circle><path d="m10.8 6.7-3.6 7.6M13.2 6.7l3.6 7.6M8 16h8"></path></svg>
+        </button>
+      </nav>
+      <nav class="rail-nav-secondary">
+        <button aria-label="Notifications" class="rail-btn" data-left-nav="notifications" title="Notifications">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </button>
+        <button aria-label="Files" class="rail-btn" data-left-nav="files" title="Uploaded Deliverables & Files">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        </button>
+        <button aria-label="Analytics" class="rail-btn" data-left-nav="analytics" title="Capability Metrics & Analytics">
+          <svg stroke="currentColor" viewBox="0 0 24 24"><line x1="18" x2="18" y1="20" y2="10"></line><line x1="12" x2="12" y1="20" y2="4"></line><line x1="6" x2="6" y1="20" y2="14"></line></svg>
+        </button>
+      </nav>
+    </div>
+    <div class="rail-bottom">
+      <button aria-label="Settings" class="rail-btn" data-left-nav="settings" title="Settings">
+        <svg stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </button>
+    </div>
+  </aside>
+
+    <!-- ══════════════════════════════════════════
+         CHALLENGE DASHBOARD — Remade Company Tasks Workspace
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-analytics" aria-label="Profile skills analytics">
+      <main class="analytics-page">
+        <header class="analytics-header">
+          <div>
+            <span>ROLE TRACK</span>
+            <h1>CORE PRODUCT MANAGEMENT</h1>
+            <p>PRODUCT · PRODUCT MANAGEMENT <b>ACTIVE</b></p>
+          </div>
+          <dl><div><dt>VSI</dt><dd>78</dd></div><div><dt>CONFIDENCE</dt><dd>HIGH</dd></div><div><dt>EVIDENCE</dt><dd>24 EVENTS</dd></div></dl>
+        </header>
+
+        <section class="analytics-main-grid">
+          <article class="capability-map">
+            <p>CAPABILITY MAP</p>
+            <div class="radar-shell">
+              <span class="radar-label top">PRODUCT DISCOVERY</span><span class="radar-label right-top">OPPORTUNITY<br>PRIORITIZATION</span><span class="radar-label right-bottom">PRODUCT STRATEGY</span><span class="radar-label bottom">METRICS REASONING</span><span class="radar-label left-bottom">EXECUTION<br>JUDGMENT</span><span class="radar-label left-top">STAKEHOLDER<br>ALIGNMENT</span>
+              <svg viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,10 84,30 82,70 50,84 19,69 15,34"/><path d="M50 4V96M6 50h88M12 24l76 52M12 76l76-52"/><polygon class="radar-data" points="50,20 73,38 74,65 50,78 28,65 27,42"/></svg>
+              <div class="vsi-disc"><strong>78</strong><span>HIGH CONFIDENCE</span><small>6 / 6 MEASURED</small></div>
+            </div>
+          </article>
+          <div class="skill-grid">
+            <article class="skill-card blue"><h2>PRODUCT DISCOVERY</h2><div class="score" style="--progress:84%;--ring:#7ea6b8"><span>84</span></div><b>HIGH CONFIDENCE</b><small>5 EVENTS · 2 VERIFIED</small></article>
+            <article class="skill-card"><h2>OPPORTUNITY<br>PRIORITIZATION</h2><div class="score" style="--progress:71%;--ring:#d0c8c0"><span>71</span></div><b>MODERATE CONFIDENCE</b><small>3 EVENTS · 1 VERIFIED</small></article>
+            <article class="skill-card"><h2>PRODUCT STRATEGY</h2><div class="score" style="--progress:79%;--ring:#e5e2e1"><span>79</span></div><b>HIGH CONFIDENCE</b><small>4 EVENTS · 2 VERIFIED</small></article>
+            <article class="skill-card orange"><h2>METRICS<br>REASONING</h2><div class="score" style="--progress:68%;--ring:#ff5a0a"><span>68</span></div><b>EMERGING CONFIDENCE</b><small>2 EVENTS · 0 VERIFIED</small></article>
+            <article class="skill-card"><h2>EXECUTION<br>JUDGMENT</h2><div class="score" style="--progress:82%;--ring:#829b7b"><span>82</span></div><b>HIGH CONFIDENCE</b><small>6 EVENTS · 3 VERIFIED</small></article>
+            <article class="skill-card"><h2>STAKEHOLDER<br>ALIGNMENT</h2><div class="score" style="--progress:74%;--ring:#a77e82"><span>74</span></div><b>MODERATE CONFIDENCE</b><small>4 EVENTS · 1 VERIFIED</small></article>
+          </div>
+        </section>
+
+        <section class="analytics-summary">
+          <article><h2>VERIFIED EVIDENCE</h2><div class="summary-split"><strong>17 / 24 <small>EVENTS VERIFIED</small></strong><strong>71% <small>VERIFICATION COVERAGE</small></strong></div><p>● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● <i>● ● ● ● ● ● ●</i></p><footer>STRONGEST VERIFIED CAPABILITY<br><b>PRODUCT DISCOVERY · 5 EVENTS</b></footer></article>
+          <article><h2>BREAKTHROUGHS</h2><strong>3 RECORDED</strong><div class="breakthrough-line">◇ — ◆ — ◇ — ◆ — ◆</div><footer>LATEST BREAKTHROUGH<br><b>PRODUCT DISCOVERY</b><em>92ND PERCENTILE</em></footer></article>
+          <article class="season-history"><h2>SEASON HISTORY</h2><strong>4 SEASONS</strong><small>COMPLETED</small><div class="season-chart"><svg viewBox="0 0 260 92" aria-label="Season confidence trend"><path class="season-trend" d="M24 70 L92 50 L160 30 L228 17"/><circle cx="24" cy="70" r="4"/><circle cx="92" cy="50" r="4"/><circle cx="160" cy="30" r="4"/><circle class="latest-season-point" cx="228" cy="17" r="4.5"/></svg></div><footer>LATEST SEASON<br><b>SEASON 04</b><em>CONFIDENCE: HIGH</em></footer></article>
+        </section>
+      </main>
+    </section>
+
+    <section class="screen" id="s-settings" aria-label="Settings">
+      <main class="settings-page">
+        <header class="settings-header"><div><p>ACCOUNT CENTER</p><h1>Settings</h1><span>Manage your Kazio identity, profile, preferences, and career information.</span></div><button class="settings-save" id="settings-save-all">Save changes</button></header>
+        <div class="settings-layout">
+          <nav class="settings-nav" aria-label="Settings sections">
+            <button class="is-active" data-settings-tab="identity">Identity</button><button data-settings-tab="professional">Professional</button><button data-settings-tab="goals">Career goals</button><button data-settings-tab="portfolio">Portfolio &amp; links</button><button data-settings-tab="privacy">Privacy &amp; visibility</button><button data-settings-tab="preferences">Preferences</button><button data-settings-tab="account">Account</button>
+          </nav>
+          <div class="settings-content">
+            <section class="settings-panel is-active" data-settings-panel="identity"><div class="settings-title"><h2>Identity</h2><p>Manage the details used across your Kazio experience.</p></div><article class="settings-card identity-card"><div class="settings-avatar">AP<button type="button" id="settings-avatar-change">Change</button></div><div><b id="settings-profile-name">Asvin Pradeep</b><small>KAZIO ID: KZ-789-XQ · Verified member</small></div><span class="settings-status">Profile complete</span></article><article class="settings-card settings-form"><label>Display name<input id="settings-name" value="Asvin Pradeep"></label><label>Email address<input id="settings-email" type="email" value="asvin@kazio.co"></label><label class="wide">Professional bio<textarea id="settings-bio" maxlength="500">Product strategist focused on evidence-backed growth and high-performance teams.</textarea></label><label>Country / region<select id="settings-country"><option>India</option><option>United States</option><option>United Kingdom</option></select></label><label>Timezone<select id="settings-timezone"><option>India Standard Time (IST)</option><option>Pacific Standard Time (PST)</option><option>Greenwich Mean Time (GMT)</option></select></label></article></section>
+            <section class="settings-panel" data-settings-panel="professional"><div class="settings-title"><h2>Professional</h2><p>Highlight your expertise, domains, and professional background.</p></div><article class="settings-card settings-form"><label>Current role<input value="Product Strategist"></label><label>Years of experience<select><option>5–8 years</option><option>3–5 years</option><option>8+ years</option></select></label><label>Primary domain<select><option>Product Management</option><option>Design</option><option>Engineering</option></select></label><label>Education<input value="BSc Computer Science"></label><label class="wide">Skills<div class="settings-tags" id="settings-skills"><span>Product strategy <button>×</button></span><span>Research <button>×</button></span><button class="tag-add" id="settings-add-skill">+ Add skill</button></div></label></article><article class="settings-card settings-upload"><b>Resume &amp; credentials</b><p>Attach the documents that support your profile.</p><div><button id="settings-upload-resume">Upload resume</button><button id="settings-upload-certificate">Upload certificate</button></div></article></section>
+            <section class="settings-panel" data-settings-panel="goals"><div class="settings-title"><h2>Career goals</h2><p>Define the work you want Kazio to surface for you.</p></div><article class="settings-card settings-form"><label class="wide">What are you trying to prove?<textarea>I want to lead product strategy for ambitious, high-impact teams.</textarea></label><label>Preferred role<select><option>Product Strategy Lead</option><option>Product Manager</option><option>Head of Product</option></select></label><label>Work preference<select><option>Remote / hybrid</option><option>Remote only</option><option>On-site</option></select></label><label>Target industry<select><option>B2B SaaS</option><option>Deep tech</option><option>FinTech</option></select></label><label>Availability<select><option>Open to opportunities</option><option>Actively interviewing</option><option>Not looking</option></select></label></article></section>
+            <section class="settings-panel" data-settings-panel="portfolio"><div class="settings-title"><h2>Portfolio &amp; links</h2><p>Connect the work and profiles you want hiring teams to see.</p></div><article class="settings-card settings-form"><label class="wide">Portfolio URL<input placeholder="https://yourportfolio.com" value="https://asvin.design"></label><label>LinkedIn<input value="linkedin.com/in/asvinpradeep"></label><label>GitHub<input value="github.com/asvinpradeep"></label><label>Case study URL<input placeholder="Add a case study"></label><label>Personal site<input placeholder="Add your website"></label></article><button class="settings-add-link" id="settings-add-link">+ Add another link</button></section>
+            <section class="settings-panel" data-settings-panel="privacy"><div class="settings-title"><h2>Privacy &amp; visibility</h2><p>Choose how your profile and assessment evidence are shared.</p></div><article class="settings-card settings-options"><label><span><b>Visible to verified companies</b><small>Let approved hiring teams discover your profile.</small></span><input type="checkbox" checked></label><label><span><b>Show activity status</b><small>Display when you are active on Kazio.</small></span><input type="checkbox" checked></label><label><span><b>Share assessment evidence</b><small>Allow verified results to strengthen your profile.</small></span><input type="checkbox" checked></label><label><span><b>Appear in public rankings</b><small>Show your name in challenge leaderboards.</small></span><input type="checkbox"></label></article></section>
+            <section class="settings-panel" data-settings-panel="preferences"><div class="settings-title"><h2>Preferences</h2><p>Control communication and workspace behaviour.</p></div><article class="settings-card settings-options"><label><span><b>Challenge invitations</b><small>Receive invitations to relevant challenges.</small></span><input type="checkbox" checked></label><label><span><b>Weekly capability summary</b><small>Get a weekly digest of your progress.</small></span><input type="checkbox" checked></label><label><span><b>Product updates</b><small>Hear about new Kazio tools and features.</small></span><input type="checkbox"></label><label><span><b>Desktop notifications</b><small>Show in-app notifications during a session.</small></span><input type="checkbox" checked></label></article></section>
+            <section class="settings-panel" data-settings-panel="account"><div class="settings-title"><h2>Account</h2><p>Manage this local Kazio profile and session.</p></div><article class="settings-card settings-account"><div><b>Export profile data</b><p>Download a local copy of your profile settings.</p></div><button id="settings-export">Export data</button><div><b>Restart onboarding</b><p>Reset your local onboarding flow and start again.</p></div><button id="settings-restart">Restart onboarding</button><div class="danger"><b>Delete local profile</b><p>Remove locally stored profile details from this device.</p></div><button class="danger-btn" id="settings-delete">Delete profile</button></article></section>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <!-- Mission Control is intentionally a content-only module: the shared rail above remains the app navigation. -->
+    <section class="screen" id="s-mission-control" aria-label="Mission Control">
+      <main class="mission-control-page">
+        <header class="mission-header">
+          <h1>Mission Control</h1>
+        </header>
+        <nav class="mission-tabs" aria-label="Mission status">
+          <button class="is-active" data-mission-status="all">ALL <b>32</b></button>
+          <button data-mission-status="action-required">ACTION REQUIRED <b>5</b></button>
+          <button data-mission-status="in-review">IN REVIEW <b>6</b></button>
+          <button data-mission-status="verified">VERIFIED <b>13</b></button>
+        </nav>
+        <section class="mission-toolbar" aria-label="Mission filters">
+          <label class="mission-status-filter">Status
+            <select id="mission-stage-filter" aria-label="Filter missions by stage">
+              <option value="all">All</option>
+              <option value="ai-q-and-a">AI Q&amp;A</option>
+              <option value="live-defense">Live Defense</option>
+            </select>
+          </label>
+        </section>
+        <section class="mission-list" id="mission-list" aria-label="Current missions">
+          <article class="mission-row" data-mission-status="action-required" data-search="global payment architecture stripe engineering role live defense">
+            <i class="mission-alert"></i><div class="mission-title"><strong>Global Payment Architecture</strong><span>Stripe • Engineering Role</span></div><span class="mission-type">INDIVIDUAL</span><div class="mission-stage"><b>LIVE DEFENSE</b><span>Scheduled: Today, 14:00</span></div><div class="mission-metric"><b>12</b><span>/ 50 slots</span></div><div class="mission-action"><button>JOIN <span>→</span></button><small>Starts in 45m</small></div>
+          </article>
+          <article class="mission-row" data-mission-status="in-review" data-search="product strategy formulation linear product role waiting on team">
+            <i class="mission-alert"></i><div class="mission-title"><strong>Product Strategy Formulation</strong><span>Linear • Product Role</span></div><span class="mission-type">TEAM</span><div class="mission-stage"><b>WAITING ON TEAM</b><span>Due: Today, 18:00</span></div><div class="mission-metric"><b>3 / 4</b><span>Ready</span></div><div class="mission-action"><button class="muted-action">NUDGE</button></div>
+          </article>
+          <article class="mission-row" data-mission-status="action-required" data-search="growth experiment design spotify growth role ai q&a pending">
+            <i class="mission-alert"></i><div class="mission-title"><strong>Growth Experiment Design</strong><span>Spotify • Growth Role</span></div><span class="mission-type">INDIVIDUAL</span><div class="mission-stage"><b>AI Q&amp;A PENDING</b><span>Due: Tomorrow</span></div><div class="mission-metric"><b>0</b><span>/ 5 answered</span></div><div class="mission-action"><button>ANSWER <span>→</span></button></div>
+          </article>
+          <article class="mission-row" data-mission-status="action-required" data-search="marketplace expansion plan cred strategy role live defense">
+            <i class="mission-alert"></i><div class="mission-title"><strong>Marketplace Expansion Plan</strong><span>CRED • Strategy Role</span></div><span class="mission-type">TEAM</span><div class="mission-stage"><b>LIVE DEFENSE</b><span>Scheduled: Today, 16:30</span></div><div class="mission-metric"><b>8</b><span>/ 10 slots</span></div><div class="mission-action"><button>JOIN <span>→</span></button><small>Starts in 3h</small></div>
+          </article>
+          <article class="mission-row" data-mission-status="verified" data-search="fintech product launch razorpay pm role verified completed leaderboard">
+            <i class="mission-alert mission-alert--verified"></i><div class="mission-title"><strong>Fintech Product Launch</strong><span>Razorpay • PM Role</span></div><span class="mission-type">INDIVIDUAL</span><div class="mission-stage mission-stage--verified"><b>VERIFIED</b><span>Completed: Today</span></div><div class="mission-metric"><b>84</b><span>score</span></div><div class="mission-action"><button class="leaderboard-action">SEE LEADERBOARD</button></div>
+          </article>
+        </section>
+        <button class="mission-load-more">LOAD MORE (19)</button>
+      </main>
+    </section>
+
+    <!-- AI Q&A follows the pending mission's Answer action. -->
+    <section class="screen" id="s-ai-qa" aria-label="AI verification questions">
+      <main class="ai-qa-page">
+        <header class="ai-qa-header">
+          <div>
+            <b>KAZIO AI</b>
+            <div class="h-4 w-px bg-white/10 mx-2 inline-block"></div>
+            <span>PRODUCT STRATEGY SPRINT <small>#AT-28471</small></span>
+          </div>
+          <div>
+            <span class="ai-qa-timer" id="ai-qa-timer-display" style="display:inline-flex;align-items:center;gap:6px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ff5a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span id="ai-qa-time-left">20:00</span> REMAINING
+            </span>
+            <span class="ai-qa-live"><i></i>SESSION ACTIVE</span>
+            <div class="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center ml-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;color:#f7f5f2;opacity:0.8;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+          </div>
+        </header>
+
+        <aside class="ai-qa-sidebar">
+          <p>VERIFICATION PROGRESS</p>
+          <nav id="ai-qa-nav-list">
+            <!-- Dynamically populated Q1..Q5 -->
+          </nav>
+          <section>
+            <b>GOAL</b>
+            <p>Evaluate feasibility and economics of the proposed vertical SaaS GTM.</p>
+            <hr>
+            <b>FACTORS</b>
+            <span>✦ Market Saturation</span>
+            <span>✦ CAC / LTV Ratio</span>
+            <span>✦ Deployment Velocity</span>
+          </section>
+        </aside>
+
+        <section class="ai-qa-workspace">
+          <div class="ai-qa-topline">
+            <span id="ai-qa-topline-title">QUESTION 01</span>
+            <div class="ai-qa-topline-actions" style="display:flex;align-items:center;gap:12px;">
+              <button id="ai-qa-btn-prev" class="ai-qa-btn-secondary" style="display:none">PREVIOUS</button>
+              <button id="ai-qa-btn-next" class="ai-qa-btn-primary">NEXT QUESTION <svg viewBox="0 0 24 24" fill="none" style="width:14px;height:14px;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-left:4px;"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+            </div>
+          </div>
+          <article id="ai-qa-article">
+            <h1 id="ai-qa-question-text">What is the primary evaluation factor for this GTM strategy?</h1>
+            <p id="ai-qa-question-desc">Select the most defensible option based on the mission brief.</p>
+            <div id="ai-qa-answer-container">
+              <!-- Dynamically populated answer options / written input / code editor -->
+            </div>
+          </article>
+        </section>
+      </main>
+    </section>
+
+    <!-- Submission Confirmation Modal -->
+    <div id="ai-qa-submit-modal" class="modal-backdrop hidden z-[200]">
+      <div class="modal-box ai-qa-modal-box">
+        <div class="ai-qa-modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ff5a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:48px;height:48px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3 class="text-2xl font-bold text-cloud-white mt-2 mb-2 font-headline-lg">Responses Submitted</h3>
+        <p class="text-on-surface-variant text-base mb-1 font-medium">You have submitted the responses.</p>
+        <p class="text-xs text-on-surface-variant/60 mb-8 leading-relaxed max-w-xs mx-auto">Your strategy rationale is now undergoing deep analysis within the Kazio Intelligence Hub.</p>
+        <button id="ai-qa-modal-redirect-btn" class="ai-qa-modal-btn">
+          Return to Mission Control
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-left:6px;"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Defense workspace — deliberately rail-free for a focused session. -->
+    <section class="screen" id="s-live-defense" aria-label="Live Defense workspace">
+      <div class="live-defense-page">
+        <header class="live-defense-header">
+          <div><span class="live-defense-dot"></span><b>LIVE DEFENSE SESSION</b><i></i><strong>Product Strategy Sprint</strong></div>
+          <div class="live-defense-session-actions"><p><small>REMAINING TIME</small><b>18:41</b></p><button id="live-defense-end"><span class="material-symbols-outlined">stop_circle</span> END SESSION</button></div>
+        </header>
+        <div class="live-defense-layout">
+          <main class="live-defense-workspace">
+            <section class="live-defense-question"><span>QUESTION 03</span><h1>Write a JavaScript function that generates a deferred authentication token valid for five minutes. Use only built-in browser APIs.</h1></section>
+            <section class="live-defense-editor">
+              <header><div><span class="material-symbols-outlined">code</span> Auto Detect: JavaScript</div><aside><span><span class="material-symbols-outlined">cloud_done</span> Auto Saved</span><button id="live-defense-copy" aria-label="Copy solution"><span class="material-symbols-outlined">content_copy</span></button><button id="live-defense-clear" aria-label="Clear solution"><span class="material-symbols-outlined">delete_sweep</span></button><button id="live-defense-run"><span class="material-symbols-outlined">play_arrow</span> RUN</button></aside></header>
+              <div class="live-defense-code"><pre aria-hidden="true">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13</pre><textarea id="live-defense-editor" spellcheck="false" aria-label="JavaScript solution">async function generateDeferredToken() {
+  // Generate a secure random string
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  const tokenBase = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+
+  const now = Date.now();
+  const expiry = now + (5 * 60 * 1000); // 5 minutes
+
+  const payload = `${tokenBase}.${expiry}`;
+  return payload;
+}</textarea></div>
+            </section>
+            <footer class="live-defense-footer"><button id="live-defense-previous"><span class="material-symbols-outlined">arrow_back</span> PREVIOUS</button><button id="live-defense-save">SAVE &amp; CONTINUE <span class="material-symbols-outlined">arrow_forward</span></button></footer>
+          </main>
+          <aside class="live-defense-monitor"><h2><span class="material-symbols-outlined">policy</span> INTEGRITY MONITOR</h2><div class="live-defense-camera"><span>REC</span><b>CAM_01 / PRIMARY</b><i class="material-symbols-outlined">videocam</i></div><div class="live-defense-screen"><span>LIVE</span><i class="material-symbols-outlined">desktop_windows</i></div><p>SYSTEM TELEMETRY</p><ul><li><span class="material-symbols-outlined">videocam</span> Camera <b>Active</b></li><li><span class="material-symbols-outlined">mic</span> Microphone <b>Active</b></li><li><span class="material-symbols-outlined">screen_share</span> Screen <b>Capturing</b></li><li><span class="material-symbols-outlined">network_ping</span> Latency <b class="latency">14ms</b></li></ul></aside>
+        </div>
+      </div>
+    </section>
+
+    <div id="live-defense-exit-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="live-defense-exit-title">
+      <div class="modal-box live-defense-modal">
+        <div class="live-defense-modal-icon live-defense-modal-icon--warning">!</div>
+        <h3 id="live-defense-exit-title">End live defense?</h3>
+        <p>Ending this task will discard all progress from this Live Defense session. You will have only one more chance to attempt it.</p>
+        <div class="modal-actions">
+          <button class="btn-action-sec" id="live-defense-exit-cancel">Keep working</button>
+          <button class="btn-danger" id="live-defense-exit-confirm">End session</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="live-defense-captured-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="live-defense-captured-title">
+      <div class="modal-box live-defense-modal">
+        <div class="live-defense-modal-icon live-defense-modal-icon--success">✓</div>
+        <h3 id="live-defense-captured-title">Response captured</h3>
+        <p>Your Live Defense response has been captured successfully.</p>
+        <div class="modal-actions">
+          <button class="btn-action-pri" id="live-defense-go-mission">Go to Mission Control</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Verified mission leaderboard, opened from Mission Control. -->
+    <section class="screen" id="s-leaderboard" aria-label="Challenge leaderboard">
+      <main class="leaderboard-page">
+        <header class="leaderboard-hero">
+          <div><div class="leaderboard-tags"><span>SEASON 2</span><span>ACTIVE</span></div><h1>Product Strategy Sprint</h1></div>
+          <div class="leaderboard-position"><span>CURRENT POSITION</span><strong>#27</strong><small>/ 1248</small><i class="leaderboard-avatar">A</i></div>
+        </header>
+        <section class="leaderboard-stats">
+          <article><span>PARTICIPANTS</span><b>1,248</b><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2"/><path d="M3 20c.4-4 2.4-6 6-6s5.6 2 6 6M15 15c3.2.1 5 1.7 5.5 5"/></svg></article>
+          <article><span>AVERAGE SCORE</span><b>82.4</b><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3M3 21h20"/></svg></article>
+          <article><span>HIGHEST SCORE</span><b>97.8</b><svg viewBox="0 0 24 24"><path d="m4 16 6-6 4 4 6-7M15 7h5v5"/></svg></article>
+          <article><span>MEDIAN</span><b>78.2</b><svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg></article>
+          <article class="leaderboard-slots"><span>INTERVIEW SLOTS</span><b>18 <i></i></b><svg viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 8h8m-8 4h5m-5 4h7"/></svg></article>
+        </section>
+        <nav class="leaderboard-toolbar"><div class="leaderboard-tabs"><button class="is-active">Leaderboard</button><button>Performance Analytics</button><button>My Position</button><button>Top Evidence</button></div><div class="leaderboard-filters"><button class="is-active">Overall</button><button>Teams</button><button>Individuals</button><label><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m16 16 4 4"/></svg><input id="leaderboard-search" placeholder="Search participant…"></label></div></nav>
+        <section class="leaderboard-grid">
+          <article class="leaderboard-list"><header><span>Rank</span><span>Participant</span><span>Score</span></header><div id="leaderboard-rows">
+            <button class="leaderboard-row is-selected" data-name="Sarah Blake" data-score="97.8" data-rank="1"><b>1</b><span class="leaderboard-avatar avatar-blue">S</span><span><strong>Sarah Blake</strong><small>ALPHA CENTAURI</small></span><em>97.8</em></button>
+            <button class="leaderboard-row" data-name="Alex Mercer" data-score="97.8" data-rank="1"><b>1</b><span class="leaderboard-avatar avatar-slate">A</span><span><strong>Alex Mercer</strong><small>NEXUS GROUP</small></span><em>97.8</em></button>
+            <button class="leaderboard-row" data-name="Elena Rostova" data-score="96.9" data-rank="3"><b>3</b><span class="leaderboard-avatar avatar-rose">E</span><span><strong>Elena Rostova</strong><small>VOID DYNAMICS</small></span><em>96.9</em></button>
+            <div class="leaderboard-hidden">23 ROWS HIDDEN</div>
+            <button class="leaderboard-row is-you" data-name="You" data-score="92.4" data-rank="27"><b>27</b><span class="leaderboard-avatar">A</span><span><strong>You <small>CURRENT</small></strong><small>ASVIN</small></span><em>92.4</em></button>
+          </div></article>
+          <article class="leaderboard-compare"><header><h2>Comparing With <span id="compare-name">Sarah Blake</span></h2><button>•••</button></header><div class="compare-avatars"><span class="leaderboard-avatar">A</span><b>VS</b><span class="leaderboard-avatar avatar-blue" id="compare-avatar">S</span></div><div class="compare-labels"><span>CURRENT USER (YOU)</span><span id="compare-rank">SARAH B. (#1)</span></div><div class="compare-bars"><div><span>PROBLEM UNDERSTANDING <b>DIFF: +1.2</b></span><i style="--score:78%;--gap:7%"></i></div><div><span>EXECUTION <b>DIFF: +0.8</b></span><i style="--score:88%;--gap:5%"></i></div><div><span>REASONING <b>DIFF: +1.5</b></span><i style="--score:73%;--gap:9%"></i></div><div><span>COMMUNICATION <b>DIFF: +1.1</b></span><i style="--score:82%;--gap:6%"></i></div></div><div class="compare-legend"><span><i></i>Your score</span><span><i></i>Difference to close</span></div><div class="leaderboard-insight"><b>WHY THEY RANKED HIGHER</b><ul><li>Stronger prioritization logic mapping back to core business goals.</li><li>Better evidence support for technical feasibility assumptions.</li><li>More concise executive summary structure.</li><li>Clearer articulation of edge-case risk mitigation.</li></ul></div></article>
+          <aside class="leaderboard-side"><article><span>INTERVIEW READINESS</span><div><b>Top 18</b><b>27</b></div><small>Gap: 9 places<br>Trend: improving</small></article><article><span>NEXT IMPROVEMENTS</span><p>Product Strategy <b>+1.3 pts</b></p><p>Technical Comms. <b>+0.8 pts</b></p><p>Data Analysis <b>+0.5 pts</b></p></article><article class="leaderboard-recommend"><span>RECOMMENDED CHALLENGE</span><h3>Product Discovery Sprint</h3><div><b>PROFESSIONAL</b><b>+3 VSI GAIN</b></div><button>ATTEMPT CHALLENGE</button></article></aside>
+        </section>
+      </main>
+    </section>
+
+    <section class="screen" id="s-dashboard">
+      <div class="workspace-main">
+        <div class="dash-inner">
+          
+          <!-- Top Header Row -->
+          <header class="dash-header">
+            <div class="dash-header-text">
+              <p class="dash-eyebrow">VERIFIED COMPANY TASKS</p>
+              <h1 class="dash-title">Company projects, ready for you.</h1>
+              <p class="dash-sub">Review live company briefs, save the ones you want, and start a task when you are ready.</p>
+            </div>
+            <div class="dash-candidate-pill" id="dash-candidate-pill">
+              <div class="dash-avatar" id="dash-avatar">AP</div>
+              <div class="dash-candidate-info">
+                <strong id="dash-name">Asvin Pradeep</strong>
+                <span class="dash-status-dot"><i></i> Challenge-ready</span>
+              </div>
+            </div>
+          </header>
+
+          <!-- Search & Filters Bar -->
+          <div class="dash-top-toolbar">
+            <div class="dash-toolbar-row">
+              <div class="dash-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6"></circle><path d="m21 21-3.5-3.5"></path></svg>
+                <input id="companySearch" placeholder="Search challenges, skills, eligibility...">
+                <span class="pill-cmd">⌘K</span>
+              </div>
+              <select id="companySelect" class="dash-select">
+                <option value="">All Companies • Default View</option>
+                <option value="Google">Google</option>
+                <option value="Linear">Linear</option>
+                <option value="Stripe">Stripe</option>
+                <option value="Figma">Figma</option>
+                <option value="Notion">Notion</option>
+                <option value="Atlassian">Atlassian</option>
+                <option value="Razorpay">Razorpay</option>
+                <option value="Zerodha">Zerodha</option>
+                <option value="Vercel">Vercel</option>
+              </select>
+              <button class="dash-icon-btn" id="btn-filters-toggle" title="Filters">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M7 12h10M10 18h4"></path></svg>
+              </button>
+            </div>
+
+            <div class="dash-toolbar-row">
+              <!-- Skill Chips -->
+              <div class="chip-row" id="skillChips">
+                <button class="chip is-active" data-filter="all">All Skills</button>
+                <button class="chip" data-filter="backend">Backend</button>
+                <button class="chip" data-filter="systems">Systems</button>
+                <button class="chip" data-filter="reliability">Reliability</button>
+                <button class="chip" data-filter="infra">Infra</button>
+                <button class="chip" data-filter="product">Product</button>
+                <button class="chip" data-filter="design">Design</button>
+              </div>
+
+              <!-- Tabs & Remote & Sort -->
+              <div class="dash-toolbar-right">
+                <div class="dash-tabs-bar" id="dashTabs">
+                  <button class="dash-tab-btn is-active" data-tab="all">All challenges <span id="cnt-all">9</span></button>
+                  <button class="dash-tab-btn" data-tab="rec">Recommended <span id="cnt-rec">4</span></button>
+                  <button class="dash-tab-btn" data-tab="saved">Saved <span id="cnt-saved">0</span></button>
+                </div>
+                
+                <div class="flex center gap8">
+                  <span class="small muted">Remote</span>
+                  <div class="toggle-pill">
+                    <button class="is-on" id="remoteAll">All</button>
+                    <button id="remoteOnly">Remote</button>
+                  </div>
+                  <select id="companySort" class="chip-select">
+                    <option value="deadline">Sort: Nearest Deadline</option>
+                    <option value="vsi">Sort: VSI Reward</option>
+                    <option value="time">Sort: Verification Time</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Meta Sub-row -->
+            <div class="dash-toolbar-row small muted meta-row">
+              <div class="flex center gap6">
+                <span>Location:</span>
+                <button class="chip-sub is-active" data-loc="all">India</button>
+                <button class="chip-sub" data-loc="remote">Kerala • Remote</button>
+                <button class="chip-sub" data-loc="bengaluru">Bengaluru</button>
+              </div>
+              <div class="flex center gap6" style="margin-left: auto;">
+                <span>Tags:</span>
+                <span class="pill-sm">L3 • High Trust</span>
+                <span class="pill-sm">Blind Shortlist</span>
+                <span class="pill-sm">No Pedigree Filter</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Cards Grid -->
+          <section class="company-grid" id="challenge-grid" aria-label="Company challenge list"></section>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="s-project" aria-label="Project brief">
+      <!-- Ambient Effects -->
+      <div class="pb-grain-overlay"></div>
+      <div class="pb-glow"></div>
+      <div class="pb-glow-secondary"></div>
+
+      <div class="project-shell">
+        <main class="project-content">
+          <!-- Top Bar -->
+          <header class="project-topbar">
+            <div class="project-brand">KAZIO <span>/ CHALLENGE BRIEF</span></div>
+            <div class="pb-user-pill">
+              <div class="pb-user-dot"></div>
+              <span id="project-user">ACTIVE PARTICIPANT</span>
+            </div>
+          </header>
+
+          <!-- Challenge Header Card -->
+          <div class="pb-header-card">
+            <div class="pb-header-left">
+              <div class="pb-header-tags">
+                <span class="pb-tag pb-tag--accent">CHALLENGE</span>
+                <span class="pb-tag" id="pb-domain-tag">Product · Core Product Management</span>
+                <span class="pb-tag-dot"></span>
+                <span class="pb-tag pb-tag--green" id="pb-status-tag">AVAILABLE</span>
+              </div>
+              <h1 id="project-title" class="pb-title">Prioritize the Next Product Bet</h1>
+            </div>
+            <div class="pb-header-right">
+              <div class="pb-header-stats">
+                <div class="pb-stat-box">
+                  <span class="pb-stat-label">DIFFICULTY</span>
+                  <span class="pb-stat-value" id="project-level">D3 <span class="pb-stat-dim">/ D5</span></span>
+                </div>
+                <div class="pb-stat-box">
+                  <span class="pb-stat-label">TIME LIMIT</span>
+                  <span class="pb-stat-value" id="project-time">90 MIN</span>
+                </div>
+                <div class="pb-stat-box">
+                  <span class="pb-stat-label">CAPABILITIES</span>
+                  <span class="pb-stat-value" id="project-reward">4 MEASURED</span>
+                </div>
+              </div>
+              <button class="pb-start-btn pb-start-btn--header">
+                <span class="pb-start-text">Start Challenge</span>
+                <span class="pb-start-arrow">→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 8/4 Grid Layout -->
+          <div class="pb-grid">
+            <!-- Left Column (Main) -->
+            <section class="pb-main-col">
+              <!-- The Situation -->
+              <article class="pb-panel pb-situation">
+                <h2 class="pb-panel-heading">The Situation</h2>
+                <div class="pb-context-chips">
+                  <div class="pb-chip"><span class="pb-chip-label">CONTEXT:</span><span class="pb-chip-value" id="project-company">B2B SAAS</span></div>
+                  <div class="pb-chip"><span class="pb-chip-label">METRIC:</span><span class="pb-chip-value pb-chip-value--error">18% CHURN</span></div>
+                  <div class="pb-chip"><span class="pb-chip-label">INPUTS:</span><span class="pb-chip-value">3 ROADMAP REQS</span></div>
+                </div>
+                <p class="pb-body-text" id="project-situation">Your core product has seen a recent spike in churn among mid-market customers. Engineering has bandwidth for one major initiative this quarter. Sales is demanding a new feature to close deals, Support is begging for technical debt resolution to lower ticket volume, and the CEO wants to pursue a new AI integration.</p>
+              </article>
+
+              <!-- Your Decision (Hero) -->
+              <article class="pb-panel pb-decision">
+                <div class="pb-decision-glow"></div>
+                <h2 class="pb-panel-heading pb-panel-heading--light">Your Decision</h2>
+                <p class="pb-decision-text">Select the <em>one product opportunity</em> the team should prioritize next.</p>
+              </article>
+
+              <!-- Available Evidence -->
+              <section class="pb-evidence-section">
+                <h2 class="pb-section-heading">Available Evidence</h2>
+                <div class="pb-evidence-grid">
+                  <div class="pb-evidence-card">
+                    <div class="pb-evidence-top"><span class="pb-evidence-icon">🎙️</span><span class="pb-evidence-type">QUALITATIVE</span></div>
+                    <span class="pb-evidence-title">Customer Interviews</span>
+                    <span class="pb-evidence-sub">5 Transcripts available</span>
+                  </div>
+                  <div class="pb-evidence-card">
+                    <div class="pb-evidence-top"><span class="pb-evidence-icon">📈</span><span class="pb-evidence-type">QUANTITATIVE</span></div>
+                    <span class="pb-evidence-title">Usage Analytics</span>
+                    <span class="pb-evidence-sub">30-day cohort data</span>
+                  </div>
+                  <div class="pb-evidence-card">
+                    <div class="pb-evidence-top"><span class="pb-evidence-icon">💰</span><span class="pb-evidence-type">FINANCIAL</span></div>
+                    <span class="pb-evidence-title">Revenue Impact</span>
+                    <span class="pb-evidence-sub">Pipeline & At-risk ARR</span>
+                  </div>
+                  <div class="pb-evidence-card">
+                    <div class="pb-evidence-top"><span class="pb-evidence-icon">⚙️</span><span class="pb-evidence-type">TECHNICAL</span></div>
+                    <span class="pb-evidence-title">Engineering Estimates</span>
+                    <span class="pb-evidence-sub">T-shirt sizing & risk</span>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Required Submission -->
+              <article class="pb-panel pb-submission">
+                <h2 class="pb-panel-heading">Required Submission</h2>
+                <div class="pb-submission-list">
+                  <div class="pb-submission-item">
+                    <div class="pb-submission-num">01</div>
+                    <span>Selected Opportunity</span>
+                  </div>
+                  <div class="pb-submission-item">
+                    <div class="pb-submission-num">02</div>
+                    <span>Primary Metric Impacted</span>
+                  </div>
+                  <div class="pb-submission-item">
+                    <div class="pb-submission-num">03</div>
+                    <span>Trade-off Justification</span>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <!-- Right Column (Sidebar) -->
+            <aside class="pb-side-col">
+              <!-- Measurement Profile with SVG Radar -->
+              <article class="pb-panel pb-radar-panel">
+                <h2 class="pb-panel-heading">Measurement Profile</h2>
+                <div class="pb-radar-container">
+                  <!-- Concentric ring guides -->
+                  <div class="pb-radar-rings">
+                    <div class="pb-ring pb-ring--1"></div>
+                    <div class="pb-ring pb-ring--2"></div>
+                    <div class="pb-ring pb-ring--3"></div>
+                    <div class="pb-ring pb-ring--4"></div>
+                  </div>
+                  <!-- SVG Radar Chart -->
+                  <svg class="pb-radar-svg" viewBox="0 0 100 100">
+                    <g class="pb-radar-axes" stroke="rgba(255,255,255,0.08)" stroke-width="0.4" fill="none">
+                      <line x1="50" y1="50" x2="50" y2="10"></line>
+                      <line x1="50" y1="50" x2="84.6" y2="30"></line>
+                      <line x1="50" y1="50" x2="84.6" y2="70"></line>
+                      <line x1="50" y1="50" x2="50" y2="90"></line>
+                      <line x1="50" y1="50" x2="15.4" y2="70"></line>
+                      <line x1="50" y1="50" x2="15.4" y2="30"></line>
+                    </g>
+                    <polygon class="pb-radar-shape" points="50,22 72,38 68,68 50,82 32,62 36,32" fill="rgba(255,90,10,0.08)" stroke="rgba(255,90,10,0.35)" stroke-width="0.6" stroke-linejoin="round"></polygon>
+                    <g class="pb-radar-nodes">
+                      <circle class="pb-node pb-node--1" cx="50" cy="22" r="2" fill="#FF5A0A"></circle>
+                      <circle class="pb-node pb-node--2" cx="72" cy="38" r="2" fill="rgba(247,245,242,0.3)"></circle>
+                      <circle class="pb-node pb-node--3" cx="68" cy="68" r="2" fill="rgba(247,245,242,0.3)"></circle>
+                      <circle class="pb-node pb-node--4" cx="50" cy="82" r="2" fill="rgba(247,245,242,0.3)"></circle>
+                      <circle class="pb-node pb-node--5" cx="32" cy="62" r="2" fill="rgba(247,245,242,0.3)"></circle>
+                      <circle class="pb-node pb-node--6" cx="36" cy="32" r="2" fill="rgba(247,245,242,0.3)"></circle>
+                    </g>
+                  </svg>
+                  <!-- Radar Labels -->
+                  <span class="pb-radar-label pb-rlabel--top" data-node="1">Cognitive Complexity</span>
+                  <span class="pb-radar-label pb-rlabel--tr" data-node="2">Problem Ambiguity</span>
+                  <span class="pb-radar-label pb-rlabel--br" data-node="3">System Scope</span>
+                  <span class="pb-radar-label pb-rlabel--bottom" data-node="4">Constraint Pressure</span>
+                  <span class="pb-radar-label pb-rlabel--bl" data-node="5">Trade-off Depth</span>
+                  <span class="pb-radar-label pb-rlabel--tl" data-node="6">Adaptive Demand</span>
+                </div>
+                <div class="pb-radar-footer">
+                  <div class="pb-radar-grade">D3 Professional</div>
+                  <div class="pb-radar-sub">6 Demand Dimensions</div>
+                </div>
+              </article>
+
+              <!-- Capabilities Measured -->
+              <article class="pb-panel pb-capabilities">
+                <h2 class="pb-panel-heading">Capabilities Measured</h2>
+                <div class="pb-cap-list">
+                  <div class="pb-cap-row">
+                    <span>Discovery</span>
+                    <div class="pb-cap-bars"><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div></div>
+                  </div>
+                  <div class="pb-cap-row">
+                    <span>Prioritization</span>
+                    <div class="pb-cap-bars"><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div></div>
+                  </div>
+                  <div class="pb-cap-row">
+                    <span>Strategy</span>
+                    <div class="pb-cap-bars"><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div></div>
+                  </div>
+                  <div class="pb-cap-row">
+                    <span>Metrics Reasoning</span>
+                    <div class="pb-cap-bars"><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div><div class="pb-cap-bar pb-cap-bar--active"></div></div>
+                  </div>
+                </div>
+              </article>
+
+              <!-- Constraint -->
+              <article class="pb-panel pb-constraint">
+                <h2 class="pb-constraint-heading">Constraint</h2>
+                <p>Engineering bandwidth is strictly limited to 1 major initiative. Parallel execution is not possible.</p>
+              </article>
+
+              <!-- Start Challenge Button -->
+              <button class="pb-start-btn" id="project-start">
+                <span class="pb-start-text">Start Challenge</span>
+                <span class="pb-start-arrow">→</span>
+              </button>
+            </aside>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN: INITIALIZE YOUR TEAM / TEAM CHOICE HUB
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-team-choice">
+      <!-- Ambient Glow Backgrounds -->
+      <div class="fixed inset-0 pointer-events-none overflow-hidden" style="z-index:0;">
+        <div class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-deep-ember/10 rounded-full blur-[160px]" style="animation: teamPulse 8s ease-in-out infinite;"></div>
+        <div class="absolute top-[40%] -right-[5%] w-[40%] h-[50%] bg-molten-orange/5 rounded-full blur-[140px]" style="animation: teamPulse 12s ease-in-out infinite; animation-delay: -4s;"></div>
+        <div class="absolute inset-0 opacity-[0.03] mix-blend-overlay" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');"></div>
+      </div>
+
+      <!-- Content Shell -->
+      <div class="relative z-10 w-full min-h-full flex flex-col justify-between" style="box-sizing:border-box;">
+        <!-- Top Bar inside main content area (Matching Image 2) -->
+        <header class="team-choice-topbar">
+          <div class="tc-sys-status">
+            <span>System: Online</span>
+            <span class="tc-pulse-dot"></span>
+          </div>
+          <div class="tc-user-widget">
+            <div class="tc-user-info">
+              <span class="tc-user-name" id="tc-display-user-name">Asvin Pradeep</span>
+              <span class="tc-user-level">Level 5 Operator</span>
+            </div>
+            <div class="tc-avatar-wrapper">
+              <div style="width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg, #FF5A0A, #FFC46B); display:flex; align-items:center; justify-content:center; color:#000; font-weight:800; font-size:13px; font-family:'Hanken Grotesk', sans-serif;" id="tc-user-avatar-initials">AP</div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Main Body -->
+        <main class="team-choice-container">
+          <!-- Phase Eyebrow -->
+          <div class="tc-phase-eyebrow">
+            <span class="tc-eyebrow-line"></span>
+            <span class="tc-eyebrow-text">Operational Phase 01</span>
+            <span class="tc-eyebrow-line reverse"></span>
+          </div>
+
+          <!-- Hero Heading -->
+          <h1 class="tc-hero-title">Initialize Your Team</h1>
+          <p class="tc-hero-sub">Choose how you will establish proof in the arena. Select your deployment strategy to begin synchronization.</p>
+
+          <!-- Cards Grid (2 Column) -->
+          <div class="tc-grid">
+            <!-- Create Team Card -->
+            <div class="tc-card" id="option-create" onclick="selectTeamOption('create')">
+              <div class="tc-card-indicator" id="indicator-create"></div>
+              <div class="tc-card-icon-box">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="tc-svg-icon"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="17" y1="11" x2="23" y2="11"></line></svg>
+              </div>
+              <h3 class="tc-card-title">Create A Team</h3>
+              <p class="tc-card-desc">Form a specialized unit and invite members via verified capability links. Establish leadership and set the tactical vision.</p>
+              <div class="tc-card-action">
+                <span>Initialize Protocol</span>
+              </div>
+            </div>
+
+            <!-- Join Team Card -->
+            <div class="tc-card" id="option-join" onclick="selectTeamOption('join')">
+              <div class="tc-card-indicator" id="indicator-join"></div>
+              <div class="tc-card-icon-box">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" class="tc-svg-icon"><path d="m11 17 2 2a1 1 0 0 0 1.4 0l4.3-4.3a1 1 0 0 0 0-1.4l-1.4-1.4a1 1 0 0 0-1.4 0l-1.9 1.9"></path><path d="M7 11.5 13.5 5a1 1 0 0 1 1.4 0l1.4 1.4a1 1 0 0 1 0 1.4L11 13"></path><path d="M4 17.5 7.5 14"></path><path d="m17 7 3.5 3.5a1.5 1.5 0 0 1 0 2.1L15.5 17.5a1.5 1.5 0 0 1-2.1 0L11 15"></path><path d="M2.5 14.5 7 10a1.5 1.5 0 0 1 2.1 0l3.4 3.4"></path></svg>
+              </div>
+              <h3 class="tc-card-title">Join A Team</h3>
+              <p class="tc-card-desc">Align with an existing squad seeking specific skill signatures. Browse available roles and submit your operational credentials.</p>
+              <div class="tc-card-action">
+                <span>Search Units</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Protocol Banner -->
+          <div class="tc-protocol-box">
+            <div class="tc-protocol-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF5A0A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <h4>System Requirements &amp; Protocol</h4>
+            </div>
+            <div class="tc-protocol-grid">
+              <div class="tc-protocol-item">
+                <span class="tc-protocol-tag">01 / Unit Capacity</span>
+                <p class="tc-protocol-text">Your unit must maintain 2-4 verified participants to remain operational within the system parameters.</p>
+              </div>
+              <div class="tc-protocol-item">
+                <span class="tc-protocol-tag">02 / Alignment Buffer</span>
+                <p class="tc-protocol-text">Registration finalizing occurs only after successful unit alignment and cryptographic verification of all members.</p>
+              </div>
+              <div class="tc-protocol-item">
+                <span class="tc-protocol-tag">03 / Round Immutability</span>
+                <p class="tc-protocol-text">Verification rounds are immutable once initialized. Ensure your squad list is accurate before confirming deployment.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="tc-action-area">
+            <button type="button" class="tc-confirm-btn" id="confirm-btn" onclick="confirmTeamSelection()" disabled>
+              <span id="btn-text">Select A Strategy</span>
+            </button>
+            <div class="tc-session-id">
+              Encrypted Session ID: <span>KZ-992-ALPHA</span>
+            </div>
+          </div>
+        </main>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN: TEAM FLOW WORKBENCH (Images 2 & 3 Style)
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-team-workbench-flow">
+      <div class="h-full w-full bg-[#030303] flex flex-col overflow-hidden text-on-surface font-inter selection:bg-molten-orange selection:text-black">
+
+        <!-- ════════════════════════════════
+             VIEW 1: CREATE A TEAM (Spatial OS v4.0.1 Redesign)
+        ════════════════════════════════ -->
+        <div id="panel-create-team" class="spatial-bg" style="display: none; width: 100%; height: 100%; position: absolute; inset: 0; flex-direction: column; overflow: hidden; color: #fadcd3; font-family: 'Inter', sans-serif;">
+          <!-- Grain Overlay -->
+          <div class="halftone-grain" style="position: absolute; inset: 0; z-index: 0; pointer-events: none;"></div>
+
+          <!-- MAIN CONTAINER (flex column, full width & height) -->
+          <div style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative; overflow: hidden; z-index: 10;">
+
+            <!-- TOP HEADER BAR -->
+            <div style="flex-shrink: 0; height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 36px; background: rgba(3, 3, 3, 0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.08); z-index: 40;">
+              <!-- Left: Brand -->
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 32px; height: 32px; border-radius: 8px; background: #FF5A0A; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(255,90,10,0.4);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8M8 12h8"></path></svg>
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                  <span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 20px; letter-spacing: 0.15em; color: #F7F5F2; font-weight: 700; text-transform: uppercase; line-height: 1;">KAZIO</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.05em; color: #FF5A0A; text-transform: uppercase; margin-top: 2px;">Spatial OS v4.0.1</span>
+                </div>
+              </div>
+
+              <!-- Right: Header Actions & Status -->
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <button type="button" onclick="openSentRequestsModal()" style="display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; color: #e4beb2; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; transition: all 0.2s;" onmouseover="this.style.borderColor='rgba(255,90,10,0.4)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF5A0A" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  <span>Team Join Requests</span>
+                  <div style="width: 20px; height: 20px; border-radius: 50%; background: #FF5A0A; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(255,90,10,0.5);">
+                    <span id="header-requests-count" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #000; font-weight: 700;">2</span>
+                  </div>
+                </button>
+
+                <button type="button" onclick="openTeamFlowTab('join')" style="display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 12px; background: rgba(255, 90, 10, 0.08); border: 1px solid rgba(255, 90, 10, 0.3); cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF5A0A; text-transform: uppercase; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,90,10,0.18)';" onmouseout="this.style.background='rgba(255,90,10,0.08)';">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                  <span>Browse Teams</span>
+                </button>
+
+                <div style="height: 24px; width: 1px; background: rgba(255,255,255,0.1); margin: 0 4px;"></div>
+
+                <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #e4beb2; font-weight: 600;">LEVEL 5 OPERATOR</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #FF5A0A; text-transform: uppercase;">Active Session</span>
+                </div>
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #FF5A0A; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px rgba(255,90,10,0.3);">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- SCROLLABLE BODY AREA -->
+            <div style="flex: 1; overflow-y: auto; padding: 28px 36px 110px 36px;" class="custom-scrollbar">
+
+              <!-- Page Title Section -->
+              <div style="margin-bottom: 28px; position: relative;">
+                <div style="position: absolute; top: -30px; left: -30px; width: 200px; height: 200px; background: rgba(255,90,10,0.06); border-radius: 50%; filter: blur(80px); pointer-events: none;"></div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.25em; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">Phase 01 // Structural</span>
+                  <div style="height: 1px; flex: 1; background: linear-gradient(to right, rgba(255,90,10,0.3), transparent);"></div>
+                </div>
+                <h1 style="font-family: 'Hanken Grotesk', sans-serif; font-size: clamp(36px, 5vw, 64px); line-height: 1.05; letter-spacing: -0.035em; font-weight: 700; color: #F7F5F2; text-transform: uppercase; margin: 0;">
+                  Initialize <span style="color: transparent; -webkit-text-stroke: 1.5px rgba(247,245,242,0.45);">Squad</span>
+                </h1>
+                <p style="font-family: 'Inter', sans-serif; font-size: 14px; color: #e4beb2; max-width: 600px; margin-top: 10px; opacity: 0.8; line-height: 1.5;">
+                  Establish a tactical synchronization node. Once initialized, your squad signature will be broadcasted to the neural network for operator matching.
+                </p>
+              </div>
+
+              <!-- TWO-COLUMN WORKSPACE GRID -->
+              <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+                <div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.1fr); gap: 24px; align-items: start;">
+
+                  <!-- LEFT COLUMN: SECTORS -->
+                  <div style="display: flex; flex-direction: column; gap: 24px;">
+
+                    <!-- SECTOR 01: Squad Alias -->
+                    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 24px 28px; position: relative; overflow: hidden;">
+                      <div style="position: absolute; top: 0; right: 0; padding: 14px 20px; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228, 190, 178, 0.35); text-transform: uppercase; letter-spacing: 0.1em;">Sector_01 // Identity</div>
+                      <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <label style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">Squad Alias</label>
+                        <div style="position: relative;">
+                          <input id="input-team-name" type="text" placeholder="NEBULA-ZERO"
+                            style="width: 100%; box-sizing: border-box; background: rgba(3, 3, 3, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 18px 140px 18px 24px; font-family: 'Hanken Grotesk', sans-serif; font-size: 24px; font-weight: 600; color: #F7F5F2; outline: none; box-shadow: inset 0 2px 8px rgba(0,0,0,0.8); transition: all 0.3s;"
+                            onfocus="this.style.borderColor='rgba(255,90,10,0.5)'; this.style.boxShadow='inset 0 2px 8px rgba(0,0,0,0.8), 0 0 15px rgba(255,90,10,0.2)';"
+                            onblur="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.boxShadow='inset 0 2px 8px rgba(0,0,0,0.8)';" />
+                          <div style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; gap: 8px;">
+                            <span id="squad-input-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #FF5A0A; display: inline-block;"></span>
+                            <span id="squad-input-status" style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Awaiting Input</span>
+                          </div>
+                        </div>
+                        <div id="team-name-error" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #ffb4ab; display: none;">Team name is required</div>
+                      </div>
+                    </div>
+
+                    <!-- SECTOR 02: Unit Composition -->
+                    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 24px 28px; display: flex; flex-direction: column; gap: 20px;">
+                      <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                          <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">Unit Composition</div>
+                          <div style="font-family: 'Inter', sans-serif; font-size: 13px; color: rgba(228, 190, 178, 0.6); margin-top: 2px;">Tactical capacity: <span id="create-team-count">1</span> / 4 Operators Linked</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(255, 90, 10, 0.08); border: 1px solid rgba(255, 90, 10, 0.2); border-radius: 999px;">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF5A0A" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M6.34 17.66a9 9 0 1 1 11.32 0"></path><path d="M8.46 15.54a6 6 0 1 1 7.08 0"></path></svg>
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">Live Sync</span>
+                        </div>
+                      </div>
+
+                      <!-- Slots Grid -->
+                      <div id="team-slots-list" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+                        <!-- Lead Operator Slot -->
+                        <div style="position: relative; cursor: default;">
+                          <div style="background: rgba(67, 49, 42, 0.6); border: 1px solid rgba(255, 90, 10, 0.4); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; min-height: 170px; position: relative;">
+                            <div style="position: absolute; top: 8px; left: 8px; padding: 2px 8px; border-radius: 999px; background: #FF5A0A; color: #000; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700;">L5</div>
+                            <div style="width: 60px; height: 60px; border-radius: 14px; background: #2c1c16; border: 2px solid rgba(255, 90, 10, 0.4); display: flex; align-items: center; justify-content: center; margin-top: 8px; box-shadow: 0 0 12px rgba(255,90,10,0.2);">
+                              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF5A0A" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <div style="text-align: center; width: 100%;">
+                              <div id="lead-name-text" style="font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: #F7F5F2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Asvin Pradeep</div>
+                              <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #FF5A0A; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px;">Lead Operator</div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Slot 2 -->
+                        <div id="slot-2-container" style="min-height: 170px;">
+                          <button type="button" style="width: 100%; height: 100%; min-height: 170px; border: 2px dashed rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: transparent; cursor: pointer; transition: all 0.25s;"
+                            onclick="toast('Select a candidate from Past Teammates or Requests to invite!')"
+                            onmouseover="this.style.borderColor='rgba(255,90,10,0.4)'; this.style.background='rgba(255,255,255,0.04)';"
+                            onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='transparent';">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(228,190,178,0.5)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </div>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.5); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Initiate Sync</span>
+                          </button>
+                        </div>
+
+                        <!-- Slot 3 -->
+                        <div id="slot-3-container" style="min-height: 170px;">
+                          <button type="button" style="width: 100%; height: 100%; min-height: 170px; border: 2px dashed rgba(255,255,255,0.1); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: transparent; cursor: pointer; transition: all 0.25s;"
+                            onclick="toast('Select a candidate from Past Teammates or Requests to invite!')"
+                            onmouseover="this.style.borderColor='rgba(255,90,10,0.4)'; this.style.background='rgba(255,255,255,0.04)';"
+                            onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='transparent';">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(228,190,178,0.5)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </div>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.5); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600;">Initiate Sync</span>
+                          </button>
+                        </div>
+
+                        <!-- Slot 4 (locked) -->
+                        <div id="slot-4-container" style="min-height: 170px; opacity: 0.5;">
+                          <button type="button" style="width: 100%; height: 100%; min-height: 170px; border: 2px dashed rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: transparent; cursor: not-allowed;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center;">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(228,190,178,0.3)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </div>
+                            <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.3); text-transform: uppercase; letter-spacing: 0.08em; text-align: center; line-height: 1.3;">Expansion Locked</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div id="team-member-requirement-hint" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF5A0A; font-weight: 500;">Add 1 more participant to complete the minimum team size (2 required)</div>
+                    </div>
+
+                    <!-- SECTOR 03: Protocol Delta -->
+                    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden;">
+                      <div style="position: absolute; right: -20px; top: 50%; transform: translateY(-50%); opacity: 0.05; pointer-events: none;">
+                        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                      </div>
+                      <div>
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">Protocol Delta</div>
+                        <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 20px; font-weight: 600; color: #F7F5F2; margin-top: 2px;">Open Recruitment Broadcast</div>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 14px;">
+                        <span id="dormant-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(228,190,178,0.6); text-transform: uppercase;">Dormant</span>
+                        <button type="button" id="protocol-toggle" style="position: relative; width: 64px; height: 32px; border-radius: 999px; background: #030303; border: 1px solid rgba(255,255,255,0.12); padding: 3px; display: flex; align-items: center; cursor: pointer; transition: all 0.4s; outline: none;">
+                          <div id="toggle-knob" style="height: 24px; width: 24px; border-radius: 50%; background: rgba(255,255,255,0.3); box-shadow: 0 2px 6px rgba(0,0,0,0.5); transition: all 0.4s; transform: translateX(0);"></div>
+                        </button>
+                        <span id="active-label" style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF5A0A; text-transform: uppercase; opacity: 0; transition: opacity 0.3s; font-weight: 600;">Active</span>
+                      </div>
+                    </div>
+
+                  </div><!-- /LEFT COLUMN -->
+
+                  <!-- RIGHT COLUMN: Intelligence Console -->
+                  <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div style="background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; display: flex; flex-direction: column; overflow: hidden; min-height: 480px;">
+                      <!-- Tabs -->
+                      <div style="display: flex; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                        <button type="button" id="tab-teammates" style="flex: 1; padding: 20px 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; background: transparent; color: #FF5A0A; border: none; border-bottom: 2px solid #FF5A0A; font-weight: 600; transition: all 0.25s;">PAST TEAMMATES</button>
+                        <button type="button" id="tab-requests" style="flex: 1; padding: 20px 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; background: transparent; color: rgba(228,190,178,0.4); border: none; border-bottom: 2px solid transparent; font-weight: 600; transition: all 0.25s;">REQUESTS</button>
+                      </div>
+
+                      <!-- Console Content Area -->
+                      <div id="console-content" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 14px;" class="custom-scrollbar">
+                        
+                        <!-- View 1: Past Teammates -->
+                        <div id="view-teammates" style="display: flex; flex-direction: column; gap: 14px;">
+                          <!-- Sarah Miller -->
+                          <div style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="position: relative;">
+                                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #FF5A0A;">SM</div>
+                                  <div style="position: absolute; bottom: -2px; right: -2px; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid #030303;"></div>
+                                </div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">Sarah Miller</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@ghost_ops</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #22c55e; text-transform: uppercase;">Active</span>
+                            </div>
+                            <button type="button" class="invite-candidate-btn" data-name="Sarah Miller" data-handle="@ghost_ops" style="width: 100%; background: rgba(255, 90, 10, 0.1); border: 1px solid rgba(255, 90, 10, 0.3); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#FF5A0A'; this.style.color='#000';" onmouseout="this.style.background='rgba(255,90,10,0.1)'; this.style.color='#FF5A0A';">Invite</button>
+                          </div>
+
+                          <!-- David Chen -->
+                          <div style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #FFC46B;">DC</div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">David Chen</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@vortex</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(228,190,178,0.4); text-transform: uppercase;">Inactive</span>
+                            </div>
+                            <button type="button" class="invite-candidate-btn" data-name="David Chen" data-handle="@vortex" style="width: 100%; background: rgba(255, 90, 10, 0.1); border: 1px solid rgba(255, 90, 10, 0.3); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#FF5A0A'; this.style.color='#000';" onmouseout="this.style.background='rgba(255,90,10,0.1)'; this.style.color='#FF5A0A';">Invite</button>
+                          </div>
+
+                          <!-- Elena Rossi -->
+                          <div style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="position: relative;">
+                                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #6ee7b7;">ER</div>
+                                  <div style="position: absolute; bottom: -2px; right: -2px; width: 10px; height: 10px; border-radius: 50%; background: #FF5A0A; border: 2px solid #030303;"></div>
+                                </div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">Elena Rossi</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@nova_prime</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(255,90,10,0.1); border: 1px solid rgba(255,90,10,0.2); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #FF5A0A; text-transform: uppercase;">In Squad</span>
+                            </div>
+                            <div style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.4); text-align: center; text-transform: uppercase; letter-spacing: 0.08em;">Linked</div>
+                          </div>
+
+                          <!-- Marcus Wright -->
+                          <div style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="position: relative;">
+                                  <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-family: 'Hanken Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: #d8b4fe;">MW</div>
+                                  <div style="position: absolute; bottom: -2px; right: -2px; width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid #030303;"></div>
+                                </div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">Marcus Wright</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@titan_01</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #22c55e; text-transform: uppercase;">Active</span>
+                            </div>
+                            <button type="button" class="invite-candidate-btn" data-name="Marcus Wright" data-handle="@titan_01" style="width: 100%; background: rgba(255, 90, 10, 0.1); border: 1px solid rgba(255, 90, 10, 0.3); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#FF5A0A'; this.style.color='#000';" onmouseout="this.style.background='rgba(255,90,10,0.1)'; this.style.color='#FF5A0A';">Invite</button>
+                          </div>
+                        </div><!-- /view-teammates -->
+
+                        <!-- View 2: Requests (hidden by default) -->
+                        <div id="view-requests" style="display: none; flex-direction: column; gap: 14px;">
+                          <!-- Leo Thorne -->
+                          <div id="req-card-leo" style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #FF5A0A; font-family: 'Hanken Grotesk', sans-serif;">LT</div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">Leo Thorne</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@vanguard_07</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(228,190,178,0.4); text-transform: uppercase;">Candidate</span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                              <span style="padding: 3px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.6); text-transform: uppercase;">Distributed Systems</span>
+                              <span style="padding: 3px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.6); text-transform: uppercase;">Neural-Link</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                              <button type="button" class="accept-req-btn" data-name="Leo Thorne" data-handle="@vanguard_07" data-card="req-card-leo" style="flex: 1; background: #FF5A0A; padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; border: none;">Accept</button>
+                              <button type="button" class="reject-req-btn" data-card="req-card-leo" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.6); text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;">Reject</button>
+                            </div>
+                          </div>
+
+                          <!-- Maya Chen -->
+                          <div id="req-card-maya" style="background: rgba(3, 3, 3, 0.5); padding: 14px; border-radius: 14px; display: flex; flex-direction: column; gap: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                              <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 42px; height: 42px; border-radius: 10px; background: #43312a; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #FFC46B; font-family: 'Hanken Grotesk', sans-serif;">MC</div>
+                                <div>
+                                  <div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 600; color: #F7F5F2;">Maya Chen</div>
+                                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.4); text-transform: uppercase;">@cipher_edge</div>
+                                </div>
+                              </div>
+                              <span style="padding: 2px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(228,190,178,0.4); text-transform: uppercase;">Candidate</span>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                              <span style="padding: 3px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.6); text-transform: uppercase;">Cryptography</span>
+                              <span style="padding: 3px 7px; border-radius: 4px; background: rgba(255,255,255,0.05); font-family: 'JetBrains Mono', monospace; font-size: 9px; color: rgba(228,190,178,0.6); text-transform: uppercase;">Stealth-Ops</span>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                              <button type="button" class="accept-req-btn" data-name="Maya Chen" data-handle="@cipher_edge" data-card="req-card-maya" style="flex: 1; background: #FF5A0A; padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #000; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; border: none;">Accept</button>
+                              <button type="button" class="reject-req-btn" data-card="req-card-maya" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.6); text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer;">Reject</button>
+                            </div>
+                          </div>
+                        </div><!-- /view-requests -->
+
+                      </div>
+
+                      <!-- Console Footer -->
+                      <div style="padding: 16px 20px; background: rgba(0,0,0,0.25); border-top: 1px solid rgba(255,255,255,0.06);">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.4); text-transform: uppercase;">Latency</span>
+                          <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">14ms // Optimal</span>
+                        </div>
+                        <div style="width: 100%; height: 4px; background: rgba(255,255,255,0.05); border-radius: 999px; overflow: hidden;">
+                          <div style="height: 100%; width: 33%; background: #FF5A0A; box-shadow: 0 0 8px rgba(255,90,10,0.5);"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- /RIGHT COLUMN -->
+
+                </div><!-- /inner grid -->
+              </div><!-- /MAIN GRID -->
+            </div><!-- /SCROLLABLE BODY -->
+
+            <!-- PERSISTENT BOTTOM CONTROLS BAR -->
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: rgba(3,3,3,0.85); backdrop-filter: blur(24px); border-top: 1px solid rgba(255,255,255,0.08); padding: 0 36px; display: flex; align-items: center; justify-content: space-between; z-index: 50;">
+              <button type="button" onclick="gotoScreen('team-choice')" style="display: flex; align-items: center; gap: 12px; padding: 10px 20px; border-radius: 14px; background: transparent; border: none; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)';" onmouseout="this.style.background='transparent';">
+                <div style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(228,190,178,0.7)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+                <div style="text-align: left;">
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(228,190,178,0.4); text-transform: uppercase; line-height: 1;">Discard Data</div>
+                  <div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #e4beb2; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-top: 2px;">Abort Initialization</div>
+                </div>
+              </button>
+              <div style="display: flex; align-items: center; gap: 28px;">
+                <div style="display: flex; flex-direction: column; align-items: flex-end; opacity: 0.5;">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 9px; color: #e4beb2; text-transform: uppercase;">Encryption Status</span>
+                  <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #FF5A0A; text-transform: uppercase; font-weight: 600;">AES-256 Enabled</span>
+                </div>
+                <button type="button" id="btn-finish-team" style="position: relative; height: 48px; padding: 0 40px; border-radius: 999px; overflow: hidden; cursor: pointer; border: none; outline: none; background: #FF5A0A; transition: all 0.25s; box-shadow: 0 0 20px rgba(255,90,10,0.3);" onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 0 30px rgba(255,90,10,0.5)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 0 20px rgba(255,90,10,0.3)';">
+                  <div style="position: relative; display: flex; align-items: center; gap: 10px;">
+                    <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: #000; text-transform: uppercase; letter-spacing: 0.15em;">Finalize Squad</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#000" stroke="#000" stroke-width="1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+          </div><!-- /MAIN CONTAINER -->
+        </div>
+
+        <!-- ════════════════════════════════
+             VIEW 2: JOIN A TEAM (Redesigned - Matches Image 2)
+        ════════════════════════════════ -->
+        <div id="panel-join-team" class="w-full flex flex-col h-full" style="display: flex; background:#030303; overflow-y:auto;">
+          <div class="join-team-shell">
+            <!-- Top Header Bar -->
+            <header class="jt-header">
+              <div class="jt-header-top">
+                <div class="jt-title-box">
+                  <h1 class="font-headline-lg-mobile text-[36px] font-bold text-cloud-white leading-none">Join a Team</h1>
+                  <p class="font-meta-data text-meta-data text-on-surface-variant mt-1.5">Browse active teams recruiting for ongoing challenges.</p>
+                </div>
+                <div class="jt-header-actions">
+                  <div class="jt-search-wrapper">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="jt-search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-teams-input" class="jt-search-input" placeholder="Search teams...">
+                  </div>
+                  <button type="button" class="jt-filter-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                    <span>Filter</span>
+                  </button>
+                </div>
+              </div>
+              <!-- Sub-nav Pills -->
+              <nav class="jt-subnav">
+                <button type="button" class="jt-pill jt-pill-create" onclick="openTeamFlowTab('create')">Create Team</button>
+                <button type="button" class="jt-pill active jt-pill-join" onclick="openTeamFlowTab('join')">Join Team (Active)</button>
+                <button type="button" class="jt-pill jt-pill-requests" id="btn-show-sent-requests" onclick="openTeamFlowTab('requests')">Requests <span style="opacity:0.5; margin-left:4px;">(2)</span></button>
+              </nav>
+            </header>
+
+            <!-- Main Content Body -->
+            <main class="jt-main-body">
+              <!-- Secondary Toolbar Filters & Sort -->
+              <div class="jt-toolbar">
+                <div class="jt-toolbar-filters">
+                  <button type="button" class="jt-chip-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Role: Any</span>
+                  </button>
+                  <button type="button" class="jt-chip-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Difficulty: D3+</span>
+                  </button>
+                </div>
+                <div class="jt-sort-wrapper">
+                  <span>Sort by:</span>
+                  <select class="jt-sort-select">
+                    <option value="recent">Most Recent</option>
+                    <option value="closing">Closing Soon</option>
+                    <option value="match">Best Match</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Team Rows List -->
+              <div class="jt-team-list" id="open-teams-list">
+                <!-- Team Row 1: The Night Watch -->
+                <div class="jt-team-row" onclick="openContextDrawer('The Night Watch', 'Product Strategy Sprint', 'Product Manager', 'We are engineering a next-gen product strategy interface. Looking for a highly analytical PM with experience in spatial computing environments. You will drive feature prioritization and define user flows for complex data visualization modules. Fast-paced, daily syncs required.')">
+                  <div class="jt-team-left">
+                    <div class="jt-team-avatar">NW</div>
+                    <div class="jt-team-info">
+                      <h3>The Night Watch</h3>
+                      <p>Product Strategy Sprint</p>
+                    </div>
+                  </div>
+                  <div class="jt-team-mid">
+                    <div class="jt-roster-stack">
+                      <div class="jt-avatar-stack">
+                        <div class="jt-stack-item">RJ</div>
+                        <div class="jt-stack-item">AM</div>
+                        <div class="jt-stack-item">DP</div>
+                        <div class="jt-stack-item">CX</div>
+                      </div>
+                      <span class="jt-memb-count">4/5 MEMB</span>
+                    </div>
+                    <div class="jt-badges-row">
+                      <span class="jt-badge">D3 PROF</span>
+                      <span class="jt-badge">4D LEFT</span>
+                    </div>
+                  </div>
+                  <div class="jt-team-req">
+                    <div class="jt-req-pill">Req: Product Manager</div>
+                    <div class="jt-meta-stats">18 Sub / 3 Disc</div>
+                  </div>
+                  <div class="jt-team-action">
+                    <button type="button" class="jt-join-btn" onclick="event.stopPropagation(); openContextDrawer('The Night Watch', 'Product Strategy Sprint', 'Product Manager', 'We are engineering a next-gen product strategy interface. Looking for a highly analytical PM with experience in spatial computing environments. You will drive feature prioritization and define user flows for complex data visualization modules. Fast-paced, daily syncs required.')">
+                      <span>Join</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Team Row 2: Apex Syndicate -->
+                <div class="jt-team-row" onclick="openContextDrawer('Apex Syndicate', 'Algorithmic Trading Bot', 'Full Stack Dev', 'Building high-throughput execution engines and visual telemetry dashboards. Seeking an experienced Full Stack Engineer with strong TypeScript, WebSockets, and low-latency system design capabilities.')">
+                  <div class="jt-team-left">
+                    <div class="jt-team-avatar" style="color:#FFC46B; border-color:rgba(255,196,107,0.3);">AS</div>
+                    <div class="jt-team-info">
+                      <h3>Apex Syndicate</h3>
+                      <p>Algorithmic Trading Bot</p>
+                    </div>
+                  </div>
+                  <div class="jt-team-mid">
+                    <div class="jt-roster-stack">
+                      <div class="jt-avatar-stack">
+                        <div class="jt-stack-item">AK</div>
+                        <div class="jt-stack-item">TS</div>
+                        <div class="jt-stack-item">+1</div>
+                      </div>
+                      <span class="jt-memb-count">2/4 MEMB</span>
+                    </div>
+                    <div class="jt-badges-row">
+                      <span class="jt-badge">D4 EXPERT</span>
+                      <span class="jt-badge">12H LEFT</span>
+                    </div>
+                  </div>
+                  <div class="jt-team-req">
+                    <div class="jt-req-pill">Req: Full Stack Dev</div>
+                    <div class="jt-meta-stats">42 Sub / 12 Disc</div>
+                  </div>
+                  <div class="jt-team-action">
+                    <button type="button" class="jt-join-btn" onclick="event.stopPropagation(); openContextDrawer('Apex Syndicate', 'Algorithmic Trading Bot', 'Full Stack Dev', 'Building high-throughput execution engines and visual telemetry dashboards. Seeking an experienced Full Stack Engineer with strong TypeScript, WebSockets, and low-latency system design capabilities.')">
+                      <span>Join</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Team Row 3: Echo Collective -->
+                <div class="jt-team-row" onclick="openContextDrawer('Echo Collective', 'Generative Audio UI', 'Sound Designer', 'Designing spatial audio cues and generative soundscapes for synthetic AI interactions. Need a Sound Designer passionate about audio-tactile feedback loops and DSP audio pipelines.')">
+                  <div class="jt-team-left">
+                    <div class="jt-team-avatar" style="color:#10b981; border-color:rgba(16,185,129,0.3);">EC</div>
+                    <div class="jt-team-info">
+                      <h3>Echo Collective</h3>
+                      <p>Generative Audio UI</p>
+                    </div>
+                  </div>
+                  <div class="jt-team-mid">
+                    <div class="jt-roster-stack">
+                      <div class="jt-avatar-stack">
+                        <div class="jt-stack-item">MV</div>
+                        <div class="jt-stack-item">SL</div>
+                      </div>
+                      <span class="jt-memb-count">2/3 MEMB</span>
+                    </div>
+                    <div class="jt-badges-row">
+                      <span class="jt-badge">D2 INTER</span>
+                      <span class="jt-badge">6D LEFT</span>
+                    </div>
+                  </div>
+                  <div class="jt-team-req">
+                    <div class="jt-req-pill" style="background:rgba(67,49,42,0.4); border-color:rgba(255,255,255,0.1); color:#F7F5F2;">Req: Sound Designer</div>
+                    <div class="jt-meta-stats">8 Sub / 1 Disc</div>
+                  </div>
+                  <div class="jt-team-action">
+                    <button type="button" class="jt-join-btn" onclick="event.stopPropagation(); openContextDrawer('Echo Collective', 'Generative Audio UI', 'Sound Designer', 'Designing spatial audio cues and generative soundscapes for synthetic AI interactions. Need a Sound Designer passionate about audio-tactile feedback loops and DSP audio pipelines.')">
+                      <span>Join</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <!-- Sliding Context Overlay & Drawer -->
+            <div class="jt-drawer-overlay" id="jt-drawer-overlay" onclick="closeContextDrawer()"></div>
+            <div class="jt-drawer" id="jt-drawer">
+              <div class="jt-drawer-header">
+                <h2 id="drawer-team-title">The Night Watch</h2>
+                <button type="button" class="jt-drawer-close" onclick="closeContextDrawer()">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+              <div class="jt-drawer-body custom-scrollbar">
+                <!-- Description -->
+                <div class="jt-drawer-section">
+                  <h4>About Operation</h4>
+                  <p id="drawer-team-desc">We are engineering a next-gen product strategy interface. Looking for a highly analytical PM with experience in spatial computing environments. You will drive feature prioritization and define user flows for complex data visualization modules. Fast-paced, daily syncs required.</p>
+                </div>
+
+                <!-- Current Roster -->
+                <div class="jt-drawer-section">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h4 style="margin:0;">Current Roster</h4>
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#FF5A0A; background:rgba(255,90,10,0.1); padding:2px 8px; border-radius:4px;" id="drawer-roster-count">4/5</span>
+                  </div>
+                  <div class="jt-roster-list" id="drawer-roster-list">
+                    <div class="jt-roster-item">
+                      <div class="jt-roster-avatar">CX</div>
+                      <div>
+                        <div class="jt-roster-name">Cipher_X / Rashi Jain</div>
+                        <div class="jt-roster-role">Lead Engineer • Product Strategy Track</div>
+                      </div>
+                    </div>
+                    <div class="jt-roster-item">
+                      <div class="jt-roster-avatar" style="background:linear-gradient(135deg, #FFC46B, #FF5A0A);">ND</div>
+                      <div>
+                        <div class="jt-roster-name">Nova_Design / Alex Morgan</div>
+                        <div class="jt-roster-role">UI/UX Architect • L3 Verified</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Application Request Form -->
+                <div class="jt-drawer-section" style="border-top:1px solid rgba(255,255,255,0.08); padding-top:20px;">
+                  <h3 style="font-family:'Hanken Grotesk',sans-serif; font-size:20px; font-weight:700; color:#F7F5F2; margin-bottom:16px;">Application Request</h3>
+                  <div class="jt-form-field">
+                    <label class="jt-form-label">Statement of Intent</label>
+                    <textarea class="jt-textarea" id="drawer-intent-input" placeholder="Detail your operational value for this specific role..."></textarea>
+                  </div>
+                  <div class="jt-form-field">
+                    <label class="jt-form-label">Attach Credentials (Portfolio)</label>
+                    <input type="text" class="jt-input" id="drawer-link-input" placeholder="https://github.com/or-portfolio-link">
+                  </div>
+                  <div class="jt-form-field">
+                    <label class="jt-form-label">Availability</label>
+                    <select class="jt-select" id="drawer-avail-select">
+                      <option>Immediate / Full-time</option>
+                      <option>Immediate / Part-time</option>
+                      <option>Next 48 Hours</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="jt-drawer-footer">
+                <button type="button" class="jt-send-btn" id="drawer-send-btn" onclick="submitDrawerJoinRequest()">
+                  <span>Send Request</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SCREEN: TEAM READY & SYNC LOBBY (Image 4 Style)
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-team-ready">
+      <div class="h-full w-full bg-kaz-black bg-grain bg-grid flex flex-col overflow-hidden text-kaz-text font-inter selection:bg-kaz-yellow selection:text-kaz-black">
+        <!-- Top Bar -->
+        <header class="h-[72px] bg-kaz-graphite border-b border-kaz-border flex items-center justify-between px-8 shrink-0 relative z-10">
+          <div class="flex items-center gap-3 font-hanken font-bold text-lg text-white">
+            <span>KAZIO</span>
+            <span class="text-kaz-muted">|</span>
+            <span class="text-kaz-muted text-sm font-normal">Tasks &amp; Projects</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-[#1F190F] border border-kaz-yellow text-kaz-yellow font-bold flex items-center justify-center text-xs">A</div>
+            <div class="flex flex-col text-left">
+              <span class="text-xs font-bold text-white" id="ready-user-name">Asvin Pradeep</span>
+              <span class="text-[10px] font-mono text-kaz-yellow tracking-widest uppercase">BUILDING EVIDENCE</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Center Hero Section -->
+        <main class="flex-1 flex flex-col items-center justify-center p-8 text-center relative z-0">
+          <!-- KAZIO Badge -->
+          <div class="inline-flex items-center gap-2 bg-[#1A150D] border border-[#3A2D1A] px-3 py-1 rounded text-[10px] font-mono text-kaz-yellow tracking-widest uppercase mb-6">
+            <span>K</span> KAZIO ARENA
+          </div>
+
+          <!-- Hero Heading -->
+          <div class="font-mono text-xs text-kaz-orange tracking-widest uppercase mb-2">TEAM PROJECT</div>
+          <h1 class="font-hanken font-bold text-4xl text-white max-w-2xl mb-4 leading-tight" id="ready-project-title">
+            Ship a 5-Day Product Spec Under Market Pressure
+          </h1>
+
+          <div class="inline-flex items-center gap-3 font-mono text-xs text-kaz-muted mb-12">
+            <span class="text-kaz-orange font-bold" id="ready-team-name">NIGHTFALL UNIT</span>
+            <span>•</span>
+            <span>4 MEMBERS</span>
+          </div>
+
+          <!-- Connection Securing Channel Indicator -->
+          <div class="mb-14 flex flex-col items-center">
+            <div class="flex items-center gap-3 text-xs font-mono text-kaz-yellow tracking-wider mb-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-kaz-yellow animate-ping"></span>
+              <span>SECURING SUBMISSION CHANNEL</span>
+            </div>
+            <div class="font-mono text-[10px] text-kaz-muted tracking-widest">ATTEMPT #KZ-8472</div>
+
+            <!-- Nodes line -->
+            <div class="flex items-center gap-4 mt-6">
+              <div class="w-2 h-2 rounded-full bg-kaz-yellow"></div>
+              <div class="w-12 h-px bg-kaz-yellow"></div>
+              <div class="w-2 h-2 rounded-full bg-kaz-yellow"></div>
+              <div class="w-12 h-px bg-kaz-yellow"></div>
+              <div class="w-2 h-2 rounded-full bg-kaz-yellow"></div>
+              <div class="w-12 h-px bg-kaz-yellow"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-kaz-orange animate-pulse"></div>
+            </div>
+          </div>
+
+          <!-- 4 Member Avatar Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl w-full mb-12">
+            <!-- Member 1 -->
+            <div class="bg-[#0A0908] border border-kaz-border rounded-xl p-5 flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full bg-emerald-950 border-2 border-emerald-500 text-emerald-400 font-bold text-xl flex items-center justify-center mb-3">G</div>
+              <div class="font-hanken font-bold text-sm text-white mb-1">GHOST</div>
+              <div class="font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider">READY</div>
+            </div>
+
+            <!-- Member 2 -->
+            <div class="bg-[#0A0908] border border-kaz-border rounded-xl p-5 flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full bg-[#1F190F] border-2 border-kaz-yellow text-kaz-yellow font-bold text-xl flex items-center justify-center mb-3">R</div>
+              <div class="font-hanken font-bold text-sm text-white mb-1">RAVEN</div>
+              <div class="font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider">READY</div>
+            </div>
+
+            <!-- Member 3 -->
+            <div class="bg-[#0A0908] border border-kaz-border rounded-xl p-5 flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full bg-amber-950 border-2 border-amber-500 text-amber-400 font-bold text-xl flex items-center justify-center mb-3 animate-pulse" id="member-3-avatar">O</div>
+              <div class="font-hanken font-bold text-sm text-white mb-1" id="member-3-name">ORACLE</div>
+              <div class="font-mono text-[10px] text-kaz-yellow font-bold uppercase tracking-wider animate-pulse" id="member-3-status">SYNCING...</div>
+            </div>
+
+            <!-- Member 4 -->
+            <div class="bg-[#0A0908] border border-kaz-border rounded-xl p-5 flex flex-col items-center">
+              <div class="w-16 h-16 rounded-full bg-purple-950 border-2 border-purple-500 text-purple-400 font-bold text-xl flex items-center justify-center mb-3">M</div>
+              <div class="font-hanken font-bold text-sm text-white mb-1">MAVERICK</div>
+              <div class="font-mono text-[10px] text-emerald-400 font-bold uppercase tracking-wider">READY</div>
+            </div>
+          </div>
+
+          <!-- Enter Workbench Action Button -->
+          <button type="button" id="btn-enter-team-workbench" class="px-10 py-4 bg-kaz-orange hover:bg-kaz-orange-hover text-white font-hanken font-bold text-lg tracking-widest rounded transition-all uppercase shadow-[0_0_25px_rgba(255,90,10,0.4)] cursor-pointer">
+            ENTER TEAM WORKBENCH →
+          </button>
+        </main>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         MODAL: INSPECT TEAM CANDIDATES & CHAT NOTE
+    ══════════════════════════════════════════ -->
+    <div id="modal-team-inspect" class="modal-backdrop hidden">
+      <div class="modal-box max-w-xl w-full bg-[#0A0908] border border-kaz-border p-6 rounded-xl shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-kaz-border pb-4 mb-4">
+          <div>
+            <h3 class="font-hanken font-bold text-lg text-white" id="inspect-team-title">Nightfall Unit</h3>
+            <div class="font-mono text-xs text-kaz-muted" id="inspect-team-lead">Lead: Rashi Jain</div>
+          </div>
+          <button type="button" id="close-inspect-modal" class="text-kaz-muted hover:text-white text-xl font-bold cursor-pointer">✕</button>
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-mono text-xs text-kaz-text tracking-widest uppercase mb-2">Team Candidates</label>
+          <div class="space-y-2" id="inspect-candidates-list">
+            <div class="bg-[#11100E] border border-kaz-border p-3 rounded flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#1F190F] text-kaz-yellow border border-kaz-yellow flex items-center justify-center font-bold text-xs">R</div>
+                <div>
+                  <div class="font-hanken font-bold text-sm text-white">Rashi Jain</div>
+                  <div class="font-mono text-[10px] text-kaz-muted">Product Management • Symbiosis School of Economics</div>
+                </div>
+              </div>
+              <span class="text-xs text-emerald-400 font-mono">Leader</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label class="block font-mono text-xs text-kaz-text tracking-widest uppercase mb-2">Add a Note / Message with Request</label>
+          <textarea id="inspect-chat-note" class="w-full bg-[#11100E] border border-kaz-border rounded p-3 text-sm text-white font-inter placeholder-kaz-muted focus:border-kaz-yellow focus:ring-1 focus:ring-kaz-yellow h-24 custom-scrollbar" placeholder="Introduce yourself or mention your skills (e.g. 'Experienced in backend specs & systems, would love to join your team!')..."></textarea>
+        </div>
+
+        <div class="flex justify-end gap-3">
+          <button type="button" id="btn-cancel-inspect" class="px-4 py-2 bg-[#1A1816] border border-kaz-border text-xs font-mono text-white rounded hover:bg-[#2A2624] cursor-pointer">Cancel</button>
+          <button type="button" id="btn-confirm-send-req" class="px-6 py-2 bg-kaz-orange hover:bg-kaz-orange-hover text-white text-xs font-mono rounded font-bold uppercase tracking-wider cursor-pointer">Send Join Request →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         WORKSPACE — KAZIO Team Challenge Submission Workbench
+    ══════════════════════════════════════════ -->
+    <section class="screen" id="s-workspace">
+      <div class="h-full w-full flex flex-col overflow-hidden bg-kaz-black bg-grain bg-grid selection:bg-kaz-yellow selection:text-kaz-black text-kaz-text font-inter">
+        <!-- BEGIN: Top Bar -->
+        <header class="h-[72px] bg-kaz-graphite border-b border-kaz-border flex items-center justify-between px-6 shrink-0 shadow-md z-10 relative">
+          <div class="flex items-center gap-4">
+            <div class="font-hanken font-bold text-xl tracking-wider text-white">KAZIO</div>
+            <div class="h-6 w-px bg-kaz-border"></div>
+            <div class="flex flex-col justify-center">
+              <h1 class="font-hanken text-lg text-white max-w-md truncate" id="ws-challenge-title">Ship a 5-Day Product Spec Under Market Pressure</h1>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 rounded-full bg-kaz-yellow animate-pulse"></div>
+              <span class="text-xs font-bold text-kaz-yellow tracking-widest">ACTIVE</span>
+            </div>
+            <div class="font-mono text-white text-lg tabular-nums tracking-wider bg-kaz-dark-gray px-3 py-1 rounded border border-kaz-border" id="ws-timer">
+              <span id="timer-val">04:18:27</span> <span class="text-xs text-kaz-muted">REMAINING</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <button class="bg-kaz-orange hover:bg-kaz-orange-hover text-white font-hanken font-bold text-xs tracking-wider px-5 py-2.5 rounded transition-colors uppercase cursor-pointer" id="btn-header-submit">
+              Submit Project
+            </button>
+          </div>
+        </header>
+        <!-- END: Top Bar -->
+
+        <!-- BEGIN: Main Workbench -->
+        <main class="flex-1 flex overflow-hidden relative">
+          <!-- LEFT PANEL: Submission Surface -->
+          <section class="w-[62%] bg-kaz-graphite border-r border-kaz-border flex flex-col relative z-0">
+            <!-- Panel Header / Switcher -->
+            <div class="h-14 border-b border-kaz-border flex items-end px-8">
+              <div class="flex gap-8">
+                <button class="relative pb-4 font-hanken font-bold text-sm text-white tracking-widest uppercase group cursor-pointer" id="tab-btn-files">
+                  <span class="flex items-center gap-2">
+                    <svg class="text-kaz-orange" fill="none" height="12" viewBox="0 0 12 12" width="12" xmlns="http://www.w3.org/2000/svg">
+                      <rect height="8" stroke="currentColor" stroke-width="2" width="8" x="2" y="2"></rect>
+                      <circle cx="6" cy="6" fill="currentColor" r="2"></circle>
+                    </svg>
+                    FILES
+                  </span>
+                  <div class="absolute bottom-0 left-0 w-full h-[2px] bg-kaz-yellow" id="indicator-files"></div>
+                </button>
+                <button class="relative pb-4 font-hanken font-bold text-sm text-kaz-muted tracking-widest uppercase hover:text-kaz-text transition-colors cursor-pointer" id="tab-btn-code">
+                  <span class="flex items-center gap-2">
+                    CODE / TERMINAL
+                  </span>
+                  <div class="absolute bottom-0 left-0 w-full h-[2px] bg-kaz-yellow hidden" id="indicator-code"></div>
+                </button>
+              </div>
+            </div>
+
+            <!-- View 1: Upload Console (Files View) -->
+            <div class="flex-1 flex flex-col p-8 overflow-y-auto custom-scrollbar" id="panel-files-view">
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="font-mono text-xs text-kaz-text tracking-widest uppercase">Project Files</h2>
+                <span class="font-mono text-xs text-kaz-muted tabular-nums" id="file-count-label">0 / 10 FILES</span>
+              </div>
+              <!-- Drop Zone -->
+              <div class="flex-1 border border-dashed border-[#3A3530] bg-[#0C0B0A] drop-zone flex flex-col items-center justify-center rounded-sm hover:bg-[#11100E] hover:border-kaz-muted transition-all cursor-pointer group" id="drop-zone-area">
+                <input type="file" id="file-picker" multiple style="display:none">
+                <div class="corner corner-bl"></div>
+                <div class="corner corner-br"></div>
+                <div class="w-16 h-16 border-2 border-kaz-border rounded-full flex items-center justify-center mb-6 group-hover:border-kaz-yellow transition-colors bg-kaz-graphite">
+                  <svg class="text-kaz-muted group-hover:text-kaz-yellow transition-colors" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="24">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" x2="12" y1="3" y2="15"></line>
+                  </svg>
+                </div>
+                <h3 class="font-hanken font-bold text-lg text-white mb-2 tracking-wide">UPLOAD PROJECT FILES</h3>
+                <p class="text-sm text-kaz-muted mb-6">DROP FILES HERE OR <span class="text-kaz-yellow underline decoration-1 underline-offset-4" id="browse-files-btn">BROWSE FILES</span></p>
+                <div class="font-mono text-[10px] text-[#5A524B] tracking-widest uppercase text-center border-t border-[#2A2624] pt-4 w-3/4">
+                  ZIP · PDF · PNG · JPG · MP4 · JSON · CSV <br><span class="mt-1 block">MAX 500 MB</span>
+                </div>
+              </div>
+              <!-- Uploaded Files List Container -->
+              <div id="uploaded-files-container" class="mt-4 flex flex-col gap-2"></div>
+            </div>
+
+            <!-- View 2: Code / Editor View -->
+            <div class="flex-1 flex flex-col p-8 overflow-y-auto custom-scrollbar hidden" id="panel-code-view">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="font-mono text-xs text-kaz-text tracking-widest uppercase">Primary Submission Editor</h2>
+                <div class="font-mono text-xs text-kaz-muted flex gap-4">
+                  <span><strong id="wc" class="text-white">0</strong> WORDS</span>
+                  <span><strong id="cc" class="text-white">0</strong> CHARS</span>
+                </div>
+              </div>
+              <textarea id="main-editor" class="w-full flex-1 min-h-[360px] bg-[#0C0B0A] border border-[#2A2624] rounded-sm p-4 text-sm text-white placeholder-kaz-muted font-mono focus:border-kaz-yellow focus:ring-1 focus:ring-kaz-yellow transition-shadow resize-none custom-scrollbar" placeholder="Write your full challenge submission code, spec, or markdown here..."></textarea>
+            </div>
+          </section>
+
+          <!-- RIGHT PANEL: Context & Actions -->
+          <section class="w-[38%] bg-[#080706] flex flex-col relative z-0">
+            <div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col pb-24">
+              <!-- Project Comments / Notes -->
+              <div class="p-6 border-b border-kaz-border">
+                <div class="flex justify-between items-end mb-4">
+                  <label class="font-mono text-xs text-kaz-text tracking-widest uppercase">Submission Notes</label>
+                  <span class="font-mono text-[10px] text-kaz-muted tabular-nums" id="notes-char-count">0 / 1200</span>
+                </div>
+                <textarea id="scratch-editor" class="w-full bg-[#11100E] border border-[#2A2624] rounded-sm p-4 text-sm text-white placeholder-kaz-muted font-inter focus:border-kaz-yellow focus:ring-1 focus:ring-kaz-yellow transition-shadow resize-none h-32 custom-scrollbar mb-3" placeholder="What did you build?"></textarea>
+                <div class="flex gap-2 flex-wrap">
+                  <button type="button" id="btn-add-decisions" class="px-3 py-1 bg-[#1A1816] border border-[#3A3530] text-[10px] font-mono text-kaz-text rounded hover:bg-[#2A2624] transition-colors uppercase tracking-wider cursor-pointer">+ DECISIONS</button>
+                  <button type="button" id="btn-add-tradeoffs" class="px-3 py-1 bg-[#1A1816] border border-[#3A3530] text-[10px] font-mono text-kaz-text rounded hover:bg-[#2A2624] transition-colors uppercase tracking-wider cursor-pointer">+ TRADE-OFFS</button>
+                  <button type="button" id="btn-add-issues" class="px-3 py-1 bg-[#1A1816] border border-[#3A3530] text-[10px] font-mono text-kaz-text rounded hover:bg-[#2A2624] transition-colors uppercase tracking-wider cursor-pointer">+ KNOWN ISSUES</button>
+                </div>
+              </div>
+
+              <!-- Submission Summary -->
+              <div class="p-6 border-b border-kaz-border">
+                <h3 class="font-mono text-xs text-kaz-text tracking-widest uppercase mb-4 flex items-center justify-between">
+                  Submission Summary
+                  <span class="text-[10px] text-kaz-yellow bg-[#1A150D] px-2 py-0.5 rounded border border-[#3A2D1A]" id="draft-status-badge">DRAFT AUTO-SAVED</span>
+                </h3>
+                <ul class="space-y-3 font-mono text-sm">
+                  <li class="flex justify-between text-kaz-muted"><span>MEMBERS</span> <span class="text-white tabular-nums" id="sum-members">4</span></li>
+                  <li class="flex justify-between text-kaz-muted"><span>FILES</span> <span class="text-white tabular-nums" id="sum-files">0</span></li>
+                  <li class="flex justify-between text-kaz-muted"><span>CODE SNIPPETS</span> <span class="text-white tabular-nums" id="sum-snippets">0</span></li>
+                  <li class="flex justify-between text-kaz-muted"><span>COMMENTS WORDS</span> <span class="text-white tabular-nums" id="sum-words">0</span></li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Final Submission Zone -->
+            <div class="absolute bottom-0 w-full bg-[#0A0908] border-t-2 border-kaz-yellow p-6 shadow-[0_-10px_30px_rgba(0,0,0,0.8)]">
+              <div class="text-center mb-4">
+                <span class="font-mono text-xs text-kaz-muted tracking-widest uppercase">READY WHEN YOU ARE DONE</span>
+              </div>
+              <button id="btn-submit" class="w-full bg-kaz-orange hover:bg-kaz-orange-hover text-white font-hanken font-bold text-lg tracking-widest py-4 rounded-sm transition-all uppercase shadow-[0_0_15px_rgba(255,90,10,0.2)] hover:shadow-[0_0_25px_rgba(255,90,10,0.4)] flex justify-center items-center gap-3 group relative overflow-hidden cursor-pointer">
+                <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_1.5s_infinite]"></div>
+                SUBMIT PROJECT
+                <svg class="group-hover:translate-x-1 transition-transform" fill="none" height="20" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" width="20">
+                  <line x1="5" x2="19" y1="12" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </div>
+          </section>
+        </main>
+      </div>
+    </section>
+
+    <!-- Submission confirmation: shown only after the existing submission succeeds. -->
+    <section class="screen submission-success-screen" id="s-submission-success" aria-labelledby="submission-success-title">
+      <div class="submission-success-page">
+        <div class="submission-success-content">
+          <header class="submission-success-header">
+            <div class="submission-success-mark" aria-hidden="true">
+              <svg class="submission-check-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12 4.2 4.2L19 6.8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div class="submission-eyebrow">SUBMISSION RECEIVED</div>
+              <h1 id="submission-success-title">YOUR ARTIFACT IS UNDER REVIEW</h1>
+              <p>Your submission has been received successfully.</p>
+            </div>
+          </header>
+
+          <section class="submission-next">
+            <div class="submission-card-title">NEXT: Q&amp;A + LIVE DEFENSE</div>
+            <p>Your work will now be reviewed. You may be asked to explain your decisions, reasoning, and approach through Q&amp;A and Live Defense.</p>
+          </section>
+
+          <p class="submission-motivation">You’ve done the work. Now let your proof speak.</p>
+          <div class="submission-actions">
+            <button type="button" id="success-go-mission">CONTINUE TO MISSION CONTROL <svg class="submission-arrow-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── GOOGLE OAUTH MODAL ─── -->
+  <div class="modal-backdrop hidden" id="google-modal">
+    <div class="modal-box google-box">
+      <div class="google-modal-top">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <div>
+          <h3>Sign in with Google</h3>
+          <p>Local demo profile</p>
+        </div>
+      </div>
+      <p class="google-modal-desc">Choose an account to continue to <strong>Kazio Assessment</strong></p>
+      <div class="google-account" id="google-account">
+        <div class="g-avatar">AM</div>
+        <div class="g-info">
+          <strong>Alex Morgan</strong>
+          <span>alex.morgan@gmail.com</span>
+        </div>
+        <div class="g-verified">Verified</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action-sec" id="google-cancel">Cancel</button>
+        <button class="btn-action-pri" id="google-confirm">Authorize →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SUBMIT MODAL ─── -->
+  <div class="modal-backdrop hidden" id="submit-modal">
+    <div class="modal-box">
+      <h3>Submit project</h3>
+      <p>This action is <strong>final</strong>. Your response will be saved locally and the session will be locked.</p>
+      <div class="submit-summary">
+        <div><span>Candidate</span><strong id="m-candidate">—</strong></div>
+        <div><span>Words</span><strong id="m-words">0</strong></div>
+        <div><span>Security</span><strong id="m-security">Clean</strong></div>
+        <div><span>Local save</span><strong style="color:var(--emerald)">Ready</strong></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-action-sec" id="submit-cancel">Continue Editing</button>
+        <button class="btn-danger" id="submit-confirm">Confirm & Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── LOCKDOWN COUNTDOWN OVERLAY ─── -->
+  <div class="lockdown-overlay hidden" id="lockdown-overlay">
+    <div class="lockdown-inner">
+      <div class="ld-shield">🛡️</div>
+      <h2>ENGAGING KAZIO LOCKDOWN</h2>
+      <p>Registering keyboard interceptors & closing external apps...</p>
+      <div class="ld-count" id="ld-count">3</div>
+    </div>
+  </div>
+
+  <!-- ─── APP MODALS / OVERLAYS ─── -->
+  <div class="modal-backdrop hidden" id="app-modal">
+    <div class="modal-box app-modal-box">
+      <div class="app-modal-head">
+        <h3 id="app-modal-title">Navigation Details</h3>
+        <button class="icon-btn" id="app-modal-close">✕</button>
+      </div>
+      <div class="app-modal-body" id="app-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ─── TOAST ─── -->
+  <div id="toast-area"></div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
